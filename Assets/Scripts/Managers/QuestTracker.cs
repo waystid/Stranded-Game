@@ -49,7 +49,7 @@ public class QuestTracker : MonoBehaviour
         if (PlayerInventory == null)
         {
             // Attempt to find the player's main inventory
-            PlayerInventory = FindObjectOfType<Inventory>();
+            PlayerInventory = FindFirstObjectByType<Inventory>();
 
             if (PlayerInventory == null)
             {
@@ -117,8 +117,8 @@ public class QuestTracker : MonoBehaviour
             // Remove the items from inventory
             if (PlayerInventory != null)
             {
-                PlayerInventory.RemoveItem(ScrapMetalItemID, ScrapMetalRequired);
-                PlayerInventory.RemoveItem(EnergyCrystalItemID, EnergyCrystalRequired);
+                PlayerInventory.RemoveItemByID(ScrapMetalItemID, ScrapMetalRequired);
+                PlayerInventory.RemoveItemByID(EnergyCrystalItemID, EnergyCrystalRequired);
             }
 
             OnQuestCompleted();
