@@ -147,7 +147,7 @@ namespace GalacticCrossing.Editor
             Debug.Log("[GalacticCrossing] Setting up GridManager...");
 
             // Check if GridManager already exists
-            var existingManager = Object.FindObjectOfType<GridManager>();
+            var existingManager = Object.FindFirstObjectByType<GridManager>();
             if (existingManager != null)
             {
                 Debug.Log("[GalacticCrossing] GridManager already exists, skipping creation");

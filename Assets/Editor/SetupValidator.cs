@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.SceneManagement;
 using MoreMountains.TopDownEngine;
+using MoreMountains.Tools;
 using System.Collections.Generic;
 using System.Text;
 
@@ -188,7 +189,7 @@ namespace GalacticCrossing.Editor
         private static void ValidateSceneObjects(ValidationReport report)
         {
             // Check for GridManager
-            var gridManager = Object.FindObjectOfType<GridManager>();
+            var gridManager = Object.FindFirstObjectByType<GridManager>();
             if (gridManager != null)
             {
                 report.AddSceneResult(true, "GridManager exists in scene");
