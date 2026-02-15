@@ -112,6 +112,126 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &1265819742651874474
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7439918114194126166}
+  - component: {fileID: 6611986354282581232}
+  - component: {fileID: 3038077630517479892}
+  m_Layer: 0
+  m_Name: InteractionZone
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7439918114194126166
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1265819742651874474}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4130249493660375059}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &6611986354282581232
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1265819742651874474}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3, y: 4, z: 3}
+  m_Center: {x: 0, y: 2, z: 0}
+--- !u!114 &3038077630517479892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1265819742651874474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 981ed422edf2f48729f5adc17ccd01f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TreeShakeZone
+  ButtonActivatedRequirement: 2
+  RequiresPlayerType: 1
+  RequiresButtonActivationAbility: 1
+  Activable: 1
+  AutoActivation: 0
+  AutoActivationAndButtonInteraction: 0
+  AutoActivationDelay: 0
+  AutoActivationDelayResetsOnExit: 1
+  CanOnlyActivateIfGrounded: 0
+  ShouldUpdateState: 1
+  OnlyOneActivationAtOnce: 1
+  TargetLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  UnlimitedActivations: 1
+  MaxNumberOfActivations: 0
+  NumberOfActivationsLeft: 0
+  DelayBetweenUses: 0
+  DisableAfterUse: 0
+  InputType: 0
+  InputButton: Interact
+  InputKey: 32
+  AnimationTriggerParameterName: 
+  UseVisualPrompt: 1
+  ButtonPromptPrefab: {fileID: 0}
+  ButtonPromptText: A
+  ButtonPromptColor: {r: 0.4862745, g: 0.9882353, b: 0, a: 1}
+  ButtonPromptTextColor: {r: 1, g: 1, b: 1, a: 1}
+  AlwaysShowPrompt: 1
+  ShowPromptWhenColliding: 1
+  HidePromptAfterUse: 0
+  PromptRelativePosition: {x: 0, y: 0, z: 0}
+  PromptRotation: {x: 0, y: 0, z: 0}
+  ActivationFeedback: {fileID: 0}
+  DeniedFeedback: {fileID: 0}
+  EnterFeedback: {fileID: 0}
+  ExitFeedback: {fileID: 0}
+  OnActivation:
+    m_PersistentCalls:
+      m_Calls: []
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStay:
+    m_PersistentCalls:
+      m_Calls: []
+  TreeModel: {fileID: 0}
+  ShakeDuration: 0.5
+  ShakeIntensity: 10
+  ShakeCooldown: 5
+  LootComponent: {fileID: 0}
 --- !u!1 &2762777224735851993
 GameObject:
   m_ObjectHideFlags: 0
@@ -122,6 +242,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4130249493660375059}
   - component: {fileID: 1427417214471356041}
+  - component: {fileID: 4202644416043008594}
+  - component: {fileID: 4784769418061725530}
   m_Layer: 0
   m_Name: AlienTree
   m_TagString: Untagged
@@ -144,6 +266,8 @@ Transform:
   m_Children:
   - {fileID: 8507184861652405297}
   - {fileID: 4584485451908737629}
+  - {fileID: 7439918114194126166}
+  - {fileID: 5115288058352289473}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &1427417214471356041
@@ -169,6 +293,294 @@ CapsuleCollider:
   m_Height: 4
   m_Direction: 1
   m_Center: {x: 0, y: 2, z: 0}
+--- !u!114 &4202644416043008594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2762777224735851993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 981ed422edf2f48729f5adc17ccd01f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TreeShakeZone
+  ButtonActivatedRequirement: 2
+  RequiresPlayerType: 1
+  RequiresButtonActivationAbility: 1
+  Activable: 1
+  AutoActivation: 0
+  AutoActivationAndButtonInteraction: 0
+  AutoActivationDelay: 0
+  AutoActivationDelayResetsOnExit: 1
+  CanOnlyActivateIfGrounded: 0
+  ShouldUpdateState: 1
+  OnlyOneActivationAtOnce: 1
+  TargetLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  UnlimitedActivations: 1
+  MaxNumberOfActivations: 0
+  NumberOfActivationsLeft: 0
+  DelayBetweenUses: 0
+  DisableAfterUse: 0
+  InputType: 0
+  InputButton: Interact
+  InputKey: 32
+  AnimationTriggerParameterName: 
+  UseVisualPrompt: 1
+  ButtonPromptPrefab: {fileID: 0}
+  ButtonPromptText: A
+  ButtonPromptColor: {r: 0.4862745, g: 0.9882353, b: 0, a: 1}
+  ButtonPromptTextColor: {r: 1, g: 1, b: 1, a: 1}
+  AlwaysShowPrompt: 1
+  ShowPromptWhenColliding: 1
+  HidePromptAfterUse: 0
+  PromptRelativePosition: {x: 0, y: 0, z: 0}
+  PromptRotation: {x: 0, y: 0, z: 0}
+  ActivationFeedback: {fileID: 0}
+  DeniedFeedback: {fileID: 0}
+  EnterFeedback: {fileID: 0}
+  ExitFeedback: {fileID: 0}
+  OnActivation:
+    m_PersistentCalls:
+      m_Calls: []
+  OnEnter:
+    m_PersistentCalls:
+      m_Calls: []
+  OnExit:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStay:
+    m_PersistentCalls:
+      m_Calls: []
+  TreeModel: {fileID: 0}
+  ShakeDuration: 0.5
+  ShakeIntensity: 10
+  ShakeCooldown: 5
+  LootComponent: {fileID: 9210297557547025500}
+--- !u!114 &4784769418061725530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2762777224735851993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d9bf1ac07f3659498e89157301c9746, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MoreMountains.TopDownEngine::MoreMountains.TopDownEngine.Loot
+  LootMode: 1
+  GameObjectToLoot: {fileID: 0}
+  LootTable:
+    ObjectsToLoot:
+    - Loot: {fileID: 848592844577350256, guid: eb1dbc5da4333444c9daab51c5e07dcf, type: 3}
+      Weight: 50
+      ChancePercentage: 0
+    - Loot: {fileID: 2832313913028469256, guid: f7123f4eabe794686b7c670fddfab4f7,
+        type: 3}
+      Weight: 30
+      ChancePercentage: 0
+    - Loot: {fileID: 6337943229405378898, guid: 25834b222d11e4dcf820d24f4acfb11f,
+        type: 3}
+      Weight: 20
+      ChancePercentage: 0
+    WeightsTotal: 0
+  LootTableSO: {fileID: 0}
+  SpawnLootOnDeath: 1
+  SpawnLootOnDamage: 0
+  PoolLoot: 0
+  PoolSize: 20
+  MutualizedPoolName: 
+  CanSpawn: 1
+  Delay: 0
+  Quantity: {x: 1, y: 1}
+  SpawnProperties:
+    Shape: 0
+    MinimumSphereRadius: 1
+    MaximumSphereRadius: 2
+    MinimumCubeBaseSize: {x: 1, y: 1, z: 1}
+    MaximumCubeBaseSize: {x: 2, y: 2, z: 2}
+    ForcePlane: 1
+    NormalToSpawnPlane: {x: 0, y: 1, z: 0}
+    MinimumNormalAxisOffset: 0
+    MaximumNormalAxisOffset: 0
+    UseNormalAxisOffsetCurve: 0
+    NormalOffsetCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    NormalOffsetCurveRemapZero: 0
+    NormalOffsetCurveRemapOne: 1
+    InvertNormalOffsetCurve: 0
+    MinimumRotation: {x: 0, y: 0, z: 0}
+    MaximumRotation: {x: 0, y: 0, z: 0}
+    MinimumScale: {x: 1, y: 1, z: 1}
+    MaximumScale: {x: 1, y: 1, z: 1}
+  LimitedLootQuantity: 1
+  MaximumQuantity: 100
+  RemainingQuantity: 100
+  AvoidObstacles: 0
+  DimensionMode: 0
+  AvoidObstaclesLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
+  AvoidRadius: 0.25
+  MaxAvoidAttempts: 5
+  LootFeedback: {fileID: 0}
+  DrawGizmos: 0
+  GizmosQuantity: 1000
+  GizmosColor: {r: 0.827451, g: 0.827451, b: 0.827451, a: 1}
+  GimosSize: 1
+  SpawnLootButton: 0
+--- !u!1 &7453515335961488743
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5115288058352289473}
+  - component: {fileID: 9210297557547025500}
+  m_Layer: 0
+  m_Name: LootSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5115288058352289473
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7453515335961488743}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4130249493660375059}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9210297557547025500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7453515335961488743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d9bf1ac07f3659498e89157301c9746, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: MoreMountains.TopDownEngine::MoreMountains.TopDownEngine.Loot
+  LootMode: 1
+  GameObjectToLoot: {fileID: 0}
+  LootTable:
+    ObjectsToLoot:
+    - Loot: {fileID: 848592844577350256, guid: eb1dbc5da4333444c9daab51c5e07dcf, type: 3}
+      Weight: 50
+      ChancePercentage: 0
+    - Loot: {fileID: 2832313913028469256, guid: f7123f4eabe794686b7c670fddfab4f7,
+        type: 3}
+      Weight: 30
+      ChancePercentage: 0
+    - Loot: {fileID: 6337943229405378898, guid: 25834b222d11e4dcf820d24f4acfb11f,
+        type: 3}
+      Weight: 20
+      ChancePercentage: 0
+    WeightsTotal: 0
+  LootTableSO: {fileID: 0}
+  SpawnLootOnDeath: 1
+  SpawnLootOnDamage: 0
+  PoolLoot: 0
+  PoolSize: 20
+  MutualizedPoolName: 
+  CanSpawn: 1
+  Delay: 0
+  Quantity: {x: 1, y: 1}
+  SpawnProperties:
+    Shape: 0
+    MinimumSphereRadius: 1
+    MaximumSphereRadius: 2
+    MinimumCubeBaseSize: {x: 1, y: 1, z: 1}
+    MaximumCubeBaseSize: {x: 2, y: 2, z: 2}
+    ForcePlane: 1
+    NormalToSpawnPlane: {x: 0, y: 1, z: 0}
+    MinimumNormalAxisOffset: 0
+    MaximumNormalAxisOffset: 0
+    UseNormalAxisOffsetCurve: 0
+    NormalOffsetCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    NormalOffsetCurveRemapZero: 0
+    NormalOffsetCurveRemapOne: 1
+    InvertNormalOffsetCurve: 0
+    MinimumRotation: {x: 0, y: 0, z: 0}
+    MaximumRotation: {x: 0, y: 0, z: 0}
+    MinimumScale: {x: 1, y: 1, z: 1}
+    MaximumScale: {x: 1, y: 1, z: 1}
+  LimitedLootQuantity: 1
+  MaximumQuantity: 100
+  RemainingQuantity: 100
+  AvoidObstacles: 0
+  DimensionMode: 0
+  AvoidObstaclesLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
+  AvoidRadius: 0.25
+  MaxAvoidAttempts: 5
+  LootFeedback: {fileID: 0}
+  DrawGizmos: 0
+  GizmosQuantity: 1000
+  GizmosColor: {r: 0.827451, g: 0.827451, b: 0.827451, a: 1}
+  GimosSize: 1
+  SpawnLootButton: 0
 --- !u!1 &8895715935865400446
 GameObject:
   m_ObjectHideFlags: 0
