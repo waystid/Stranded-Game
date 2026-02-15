@@ -101,7 +101,7 @@ namespace GalacticCrossing.Editor
 
             foreach (var pickup in weaponPickups)
             {
-                if (!toRemove.Contains(pickup.gameObject))
+                if (pickup != null && pickup.gameObject != null && !toRemove.Contains(pickup.gameObject))
                 {
                     toRemove.Add(pickup.gameObject);
                 }
@@ -111,11 +111,11 @@ namespace GalacticCrossing.Editor
             var allObjects = Object.FindObjectsByType<GameObject>(FindObjectsSortMode.None);
             foreach (var obj in allObjects)
             {
-                if (obj.layer == LayerMask.NameToLayer("Weapon") ||
+                if (obj != null && (obj.layer == LayerMask.NameToLayer("Weapon") ||
                     obj.tag == "Weapon" ||
                     obj.name.ToLower().Contains("weapon") ||
                     obj.name.ToLower().Contains("gun") ||
-                    obj.name.ToLower().Contains("rifle"))
+                    obj.name.ToLower().Contains("rifle")))
                 {
                     if (!toRemove.Contains(obj))
                     {
@@ -127,6 +127,7 @@ namespace GalacticCrossing.Editor
             // Remove all identified weapons
             foreach (var obj in toRemove)
             {
+                if (obj == null) continue;
                 Debug.Log($"[GalacticCrossing] Removing weapon: {obj.name}");
                 Object.DestroyImmediate(obj);
                 removedCount++;
