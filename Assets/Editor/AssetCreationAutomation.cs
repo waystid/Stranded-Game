@@ -102,8 +102,7 @@ namespace GalacticCrossing.Editor
             // Configure item properties
             scrapMetal.ItemID = "ScrapMetal";
             scrapMetal.ItemName = "Scrap Metal";
-            scrapMetal.ItemDescription = "Twisted hull plating from the crash. Useful for crafting repairs.";
-            scrapMetal.IsStackable = true;
+            scrapMetal.Description = "Twisted hull plating from the crash. Useful for crafting repairs.";
             scrapMetal.MaximumStack = 30;
             scrapMetal.Usable = false; // Can't be used directly, only for crafting
 
@@ -131,8 +130,7 @@ namespace GalacticCrossing.Editor
             // Configure item properties
             energyCrystal.ItemID = "EnergyCrystal";
             energyCrystal.ItemName = "Energy Crystal";
-            energyCrystal.ItemDescription = "A glowing crystalline formation. Contains stored energy from the planet's core.";
-            energyCrystal.IsStackable = true;
+            energyCrystal.Description = "A glowing crystalline formation. Contains stored energy from the planet's core.";
             energyCrystal.MaximumStack = 30;
             energyCrystal.Usable = false; // Resource item
 
@@ -175,8 +173,7 @@ namespace GalacticCrossing.Editor
             // Configure item properties
             alienBerry.ItemID = "AlienBerry";
             alienBerry.ItemName = "Alien Berry";
-            alienBerry.ItemDescription = "A nutritious alien fruit. Restores stamina when consumed.";
-            alienBerry.IsStackable = true;
+            alienBerry.Description = "A nutritious alien fruit. Restores stamina when consumed.";
             alienBerry.MaximumStack = 10;
             alienBerry.Usable = true; // Can be consumed
 
@@ -378,11 +375,14 @@ namespace GalacticCrossing.Editor
             var dialogueZone = gaiaObj.AddComponent<DialogueZone>();
 
             // Configure dialogue
-            dialogueZone.DialogueText = "Welcome to the colonization initiative... er, emergency landing protocol.\n\n" +
-                                       "I am G.A.I.A., your Global Artificial Intelligence Assistant.\n\n" +
-                                       "Let's get you settled on this lovely planet!";
+            dialogueZone.Dialogue = new DialogueElement[]
+            {
+                new DialogueElement { DialogueLine = "Welcome to the colonization initiative... er, emergency landing protocol." },
+                new DialogueElement { DialogueLine = "I am G.A.I.A., your Global Artificial Intelligence Assistant." },
+                new DialogueElement { DialogueLine = "Let's get you settled on this lovely planet!" }
+            };
 
-            dialogueZone.ButtonPrompt = "Talk to G.A.I.A.";
+            dialogueZone.ButtonPromptText = "Talk to G.A.I.A.";
 
             // Add trigger collider for interaction zone
             var sphereCollider = gaiaObj.GetComponent<SphereCollider>();
