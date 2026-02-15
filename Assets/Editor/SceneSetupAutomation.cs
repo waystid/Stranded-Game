@@ -6,6 +6,10 @@ using MoreMountains.Tools;
 using System.Collections.Generic;
 using System.Linq;
 
+#if CINEMACHINE
+using Cinemachine;
+#endif
+
 namespace GalacticCrossing.Editor
 {
     /// <summary>
@@ -47,14 +51,14 @@ namespace GalacticCrossing.Editor
             List<GameObject> toRemove = new List<GameObject>();
 
             // Find all objects with AIBrain component (all AI-controlled enemies)
-            var aiBrains = Object.FindObjectsOfType<AIBrain>();
+            var aiBrains = Object.FindObjectsByType<AIBrain>(FindObjectsSortMode.None);
             foreach (var brain in aiBrains)
             {
                 toRemove.Add(brain.gameObject);
             }
 
             // Find all objects with Health component that are enemies
-            var healthComponents = Object.FindObjectsOfType<Health>();
+            var healthComponents = Object.FindObjectsByType<Health>(FindObjectsSortMode.None);
             foreach (var health in healthComponents)
             {
                 // Check if this is an enemy (not the player)
@@ -90,7 +94,7 @@ namespace GalacticCrossing.Editor
             List<GameObject> toRemove = new List<GameObject>();
 
             // Find all WeaponPickup components
-            var weaponPickups = Object.FindObjectsOfType<MonoBehaviour>()
+            var weaponPickups = Object.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None)
                 .Where(mb => mb.GetType().Name.Contains("WeaponPickup") ||
                              mb.GetType().Name.Contains("Weapon"))
                 .ToList();
@@ -104,7 +108,7 @@ namespace GalacticCrossing.Editor
             }
 
             // Find objects in "Weapons" layer or with "Weapon" tag
-            var allObjects = Object.FindObjectsOfType<GameObject>();
+            var allObjects = Object.FindObjectsByType<GameObject>(FindObjectsSortMode.None);
             foreach (var obj in allObjects)
             {
                 if (obj.layer == LayerMask.NameToLayer("Weapon") ||
@@ -182,7 +186,7 @@ namespace GalacticCrossing.Editor
             Debug.Log("[GalacticCrossing] Configuring player character...");
 
             // Find the player character
-            var characters = Object.FindObjectsOfType<Character>();
+            var characters = Object.FindObjectsByType<Character>(FindObjectsSortMode.None);
             Character player = null;
 
             foreach (var character in characters)
@@ -313,11 +317,12 @@ namespace GalacticCrossing.Editor
         {
             Debug.Log("[GalacticCrossing] Configuring camera settings...");
 
+#if CINEMACHINE
             // Find Cinemachine Virtual Camera
-            var cameras = Object.FindObjectsOfType<UnityEngine.GameObject>()
+            var cameras = Object.FindObjectsByType<UnityEngine.GameObject>(FindObjectsSortMode.None)
                 .Where(go => go.name.Contains("VirtualCamera") ||
                             go.name.Contains("CM") ||
-                            go.GetComponent<Cinemachine.CinemachineVirtualCamera>() != null)
+                            go.GetComponent<CinemachineVirtualCamera>() != null)
                 .ToList();
 
             if (cameras.Count == 0)
@@ -328,7 +333,7 @@ namespace GalacticCrossing.Editor
 
             foreach (var cameraObj in cameras)
             {
-                var vcam = cameraObj.GetComponent<Cinemachine.CinemachineVirtualCamera>();
+                var vcam = cameraObj.GetComponent<CinemachineVirtualCamera>();
                 if (vcam != null)
                 {
                     Debug.Log($"[GalacticCrossing] Configuring camera: {cameraObj.name}");
@@ -347,6 +352,9 @@ namespace GalacticCrossing.Editor
             }
 
             Debug.Log("[GalacticCrossing] Camera configuration completed");
+#else
+            Debug.LogWarning("[GalacticCrossing] Cinemachine not detected. Camera configuration skipped. Install Cinemachine package to enable camera auto-configuration.");
+#endif
         }
 
         #endregion
