@@ -34,7 +34,7 @@ public class TreeShakeZone : ButtonActivated
     /// <summary>
     /// Initialization - store the original rotation of the tree
     /// </summary>
-    protected override void Initialization()
+    public override void Initialization()
     {
         base.Initialization();
 
@@ -56,7 +56,7 @@ public class TreeShakeZone : ButtonActivated
     /// <summary>
     /// Override the activation method to implement shake behavior
     /// </summary>
-    public override void ActivateZone()
+    protected override void ActivateZone()
     {
         // Prevent activation if already shaking or on cooldown
         if (_isShaking || _onCooldown)
@@ -126,16 +126,4 @@ public class TreeShakeZone : ButtonActivated
         _onCooldown = false;
     }
 
-    /// <summary>
-    /// Optional: Visual feedback for when the zone is on cooldown
-    /// Override to customize prompt text
-    /// </summary>
-    public override string GetPromptText()
-    {
-        if (_onCooldown)
-        {
-            return "Tree is settling...";
-        }
-        return base.GetPromptText();
-    }
 }
