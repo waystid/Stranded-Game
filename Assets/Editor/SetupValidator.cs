@@ -208,7 +208,7 @@ namespace GalacticCrossing.Editor
             }
 
             // Check for Player
-            var characters = Object.FindObjectsOfType<Character>();
+            var characters = Object.FindObjectsByType<Character>(FindObjectsSortMode.None);
             Character player = null;
             foreach (var character in characters)
             {
@@ -232,7 +232,7 @@ namespace GalacticCrossing.Editor
             }
 
             // Check for AI enemies (should be removed)
-            var aiBrains = Object.FindObjectsOfType<AIBrain>();
+            var aiBrains = Object.FindObjectsByType<AIBrain>(FindObjectsSortMode.None);
             if (aiBrains.Length == 0)
             {
                 report.AddSceneResult(true, "No AI enemies found (correctly removed)");

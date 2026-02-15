@@ -186,7 +186,7 @@ namespace GalacticCrossing.Editor
         /// <returns>Array of all MeshRenderer components found</returns>
         public static MeshRenderer[] FindAllMeshRenderers(bool includeInactive = true)
         {
-            return GameObject.FindObjectsOfType<MeshRenderer>(includeInactive);
+            return GameObject.FindObjectsByType<MeshRenderer>(includeInactive ? FindObjectsInactive.Include : FindObjectsInactive.Exclude, FindObjectsSortMode.None);
         }
 
         /// <summary>
@@ -196,7 +196,7 @@ namespace GalacticCrossing.Editor
         /// <returns>Array of all SkinnedMeshRenderer components found</returns>
         public static SkinnedMeshRenderer[] FindAllSkinnedMeshRenderers(bool includeInactive = true)
         {
-            return GameObject.FindObjectsOfType<SkinnedMeshRenderer>(includeInactive);
+            return GameObject.FindObjectsByType<SkinnedMeshRenderer>(includeInactive ? FindObjectsInactive.Include : FindObjectsInactive.Exclude, FindObjectsSortMode.None);
         }
 
         /// <summary>
@@ -207,7 +207,7 @@ namespace GalacticCrossing.Editor
         /// <returns>Array of all Renderer components found</returns>
         public static Renderer[] FindAllRenderers(bool includeInactive = true)
         {
-            return GameObject.FindObjectsOfType<Renderer>(includeInactive);
+            return GameObject.FindObjectsByType<Renderer>(includeInactive ? FindObjectsInactive.Include : FindObjectsInactive.Exclude, FindObjectsSortMode.None);
         }
 
         #endregion
