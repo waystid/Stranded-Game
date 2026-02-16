@@ -1,0 +1,310 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "game_name": "Cosmic Colony",
+    "source_game": "Animal Crossing: New Horizons",
+    "last_updated": "2026-02-16",
+    "description": "1:1 mapping of ACNH features to Cosmic Colony universe"
+  },
+  "currency": {
+    "bells": {
+      "acnh_name": "Bells",
+      "cosmic_name": "Credits",
+      "cosmic_lore": "Galactic standard currency used across all inhabited systems",
+      "icon_suggestion": "holographic credit chip"
+    },
+    "nook_miles": {
+      "acnh_name": "Nook Miles",
+      "cosmic_name": "Pioneer Points",
+      "cosmic_lore": "Reputation points earned through achievements and exploration milestones",
+      "icon_suggestion": "star badge with galaxy swirl"
+    }
+  },
+  "world_elements": {
+    "island": {
+      "acnh_name": "Island",
+      "cosmic_name": "Crash Site Planet",
+      "cosmic_lore": "A small planetoid where your escape pod crash-landed after a catastrophic warp drive failure",
+      "topdown_implementation": "Use Tilemap system or 3D terrain grid. Procedurally generated planetoid with biomes."
+    },
+    "rivers": {
+      "acnh_name": "Rivers",
+      "cosmic_name": "Plasma Flows",
+      "cosmic_lore": "Streams of ionized energy that flow across the planet's surface",
+      "topdown_implementation": "Environment zones requiring Jet-Jump ability (vaulting pole equivalent) to cross"
+    },
+    "ponds": {
+      "acnh_name": "Ponds",
+      "cosmic_name": "Nebula Pools",
+      "cosmic_lore": "Concentrated pockets of cosmic energy and stellar matter",
+      "topdown_implementation": "Fishing zones for energy organisms"
+    },
+    "cliffs": {
+      "acnh_name": "Cliffs",
+      "cosmic_name": "Crater Plateaus",
+      "cosmic_lore": "Elevated terrain formed by ancient meteorite impacts",
+      "topdown_implementation": "Multi-level zones using TopDown Engine's level system with Gravity Lifts (ladder equivalent)"
+    },
+    "trees": {
+      "acnh_name": "Trees",
+      "cosmic_name": "Xeno-Flora",
+      "cosmic_lore": "Bioluminescent alien plant life that produces Energy Orbs instead of fruit",
+      "topdown_implementation": "Interactable objects with shake mechanic (MMFeedback) that drop loot"
+    },
+    "beach": {
+      "acnh_name": "Beach",
+      "cosmic_name": "Radiation Belt",
+      "cosmic_lore": "The outer edge of the planet where cosmic radiation meets the atmosphere",
+      "topdown_implementation": "Special zone with unique collectibles and landing pad for visitors"
+    }
+  },
+  "buildings": {
+    "resident_services": {
+      "acnh_name": "Resident Services",
+      "cosmic_name": "Command Center",
+      "cosmic_lore": "Central hub run by Z.O.E. (Zero-Gravity Operations Entity) AI",
+      "topdown_implementation": "Scene activation for interior, hub for quests and upgrades"
+    },
+    "nook_cranny": {
+      "acnh_name": "Nook's Cranny",
+      "cosmic_name": "Trade Hub",
+      "cosmic_lore": "Automated trading post that connects to the galactic marketplace",
+      "topdown_implementation": "Shop system using TopDown Engine's inventory interface"
+    },
+    "museum": {
+      "acnh_name": "Museum",
+      "cosmic_name": "Galactic Archive",
+      "cosmic_lore": "Repository of alien specimens, ancient artifacts, and cosmic art",
+      "topdown_implementation": "Collection tracking system with display rooms"
+    },
+    "able_sisters": {
+      "acnh_name": "Able Sisters",
+      "cosmic_name": "Nano-Fabricator",
+      "cosmic_lore": "Advanced clothing synthesizer that creates custom spacesuits and attire",
+      "topdown_implementation": "Customization shop for character appearance"
+    },
+    "airport": {
+      "acnh_name": "Dodo Airlines",
+      "cosmic_name": "Warp Gate",
+      "cosmic_lore": "Quantum teleportation hub for visiting other colonists' planets",
+      "topdown_implementation": "Multiplayer lobby and scene transition system"
+    }
+  },
+  "tools": {
+    "fishing_rod": {
+      "acnh_name": "Fishing Rod",
+      "cosmic_name": "Plasma Seiner",
+      "cosmic_lore": "Electromagnetic field projector that captures energy-based organisms",
+      "topdown_implementation": "Tool component inheriting from Weapon class with casting mechanic",
+      "tool_category": "gathering"
+    },
+    "net": {
+      "acnh_name": "Net",
+      "cosmic_name": "Stasis Field Generator",
+      "cosmic_lore": "Creates a temporary time-dilation field to capture mobile specimens",
+      "topdown_implementation": "Melee weapon with capture radius and stasis effect",
+      "tool_category": "gathering"
+    },
+    "shovel": {
+      "acnh_name": "Shovel",
+      "cosmic_name": "Mineral Extractor",
+      "cosmic_lore": "Multi-purpose excavation tool for digging up artifacts and planting flora",
+      "topdown_implementation": "Tool for digging spots and planting, interacts with ground layer",
+      "tool_category": "gathering"
+    },
+    "axe": {
+      "acnh_name": "Axe",
+      "cosmic_name": "Plasma Cutter",
+      "cosmic_lore": "High-energy beam tool for harvesting Xeno-Flora resources",
+      "topdown_implementation": "Melee weapon that damages tree objects, multiple hit levels",
+      "tool_category": "gathering"
+    },
+    "watering_can": {
+      "acnh_name": "Watering Can",
+      "cosmic_name": "Bio-Catalyst Sprayer",
+      "cosmic_lore": "Nutrient mist dispenser that accelerates Xeno-Flora growth",
+      "topdown_implementation": "Tool with area effect on plant objects",
+      "tool_category": "gardening"
+    },
+    "slingshot": {
+      "acnh_name": "Slingshot",
+      "cosmic_name": "Gravity Disruptor",
+      "cosmic_lore": "Device that shoots graviton pellets to knock down floating objects",
+      "topdown_implementation": "Ranged weapon with arc trajectory",
+      "tool_category": "gathering"
+    },
+    "vaulting_pole": {
+      "acnh_name": "Vaulting Pole",
+      "cosmic_name": "Jet-Jump Boots",
+      "cosmic_lore": "Anti-gravity propulsion footwear for crossing plasma flows",
+      "topdown_implementation": "Movement ability unlock for crossing environment zones",
+      "tool_category": "traversal"
+    },
+    "ladder": {
+      "acnh_name": "Ladder",
+      "cosmic_name": "Gravity Lift",
+      "cosmic_lore": "Personal anti-gravity device for scaling crater plateaus",
+      "topdown_implementation": "Ability to access higher terrain levels",
+      "tool_category": "traversal"
+    }
+  },
+  "collectible_categories": {
+    "fish": {
+      "acnh_name": "Fish",
+      "cosmic_name": "Nebula Organisms",
+      "cosmic_lore": "Energy-based life forms that swim through plasma flows and nebula pools",
+      "collection_location": "Plasma Flows, Nebula Pools, Cosmic Ocean",
+      "topdown_implementation": "PickableItem with rarity system, time/location spawning"
+    },
+    "bugs": {
+      "acnh_name": "Bugs",
+      "cosmic_name": "Micro-Drones",
+      "cosmic_lore": "Small autonomous bio-mechanical entities that inhabit the planet",
+      "collection_location": "Xeno-Flora, rocks, air",
+      "topdown_implementation": "AI entities with flee behavior, captured with Stasis Field"
+    },
+    "fossils": {
+      "acnh_name": "Fossils",
+      "cosmic_name": "Ancient Artifacts",
+      "cosmic_lore": "Remnants of long-dead civilizations and extinct alien species",
+      "collection_location": "Dig spots across planet",
+      "topdown_implementation": "Hidden items revealed by digging mechanic"
+    },
+    "sea_creatures": {
+      "acnh_name": "Sea Creatures",
+      "cosmic_name": "Deep Void Entities",
+      "cosmic_lore": "Creatures that exist in the deepest plasma trenches",
+      "collection_location": "Deep plasma diving areas",
+      "topdown_implementation": "Swimming mechanic with breath system, chase mechanics"
+    }
+  },
+  "npcs": {
+    "tom_nook": {
+      "acnh_name": "Tom Nook",
+      "cosmic_name": "Z.O.E.",
+      "full_name": "Zero-Gravity Operations Entity",
+      "cosmic_lore": "The AI that saved you from your crashed escape pod... and now bills you for repairs",
+      "species": "Advanced AI Hologram",
+      "topdown_implementation": "Dialogue system NPC, quest giver, shop keeper"
+    },
+    "isabelle": {
+      "acnh_name": "Isabelle",
+      "cosmic_name": "I.R.I.S.",
+      "full_name": "Intelligent Resource and Information System",
+      "cosmic_lore": "Z.O.E.'s assistant AI who helps manage daily colony operations",
+      "species": "Support AI Hologram",
+      "topdown_implementation": "Daily announcements, island rating system, environmental controls"
+    },
+    "villagers": {
+      "acnh_name": "Villagers",
+      "cosmic_name": "Refugee Colonists",
+      "cosmic_lore": "Aliens from various species seeking refuge on your planet",
+      "species": "Multi-species (Crystalline, Gaseous, Aquatic, etc.)",
+      "topdown_implementation": "AI agents with daily routines, dialogue trees, gift system"
+    },
+    "blathers": {
+      "acnh_name": "Blathers",
+      "cosmic_name": "Dr. Stellarion",
+      "cosmic_lore": "An eccentric xenobiologist who curates the Galactic Archive",
+      "species": "Nocturnal Avian Alien",
+      "topdown_implementation": "Donation system NPC with lore dialogue for each item"
+    },
+    "celeste": {
+      "acnh_name": "Celeste",
+      "cosmic_name": "Astra",
+      "cosmic_lore": "Stellarion's sister, an astronomer who tracks meteor showers and cosmic events",
+      "species": "Nocturnal Avian Alien",
+      "topdown_implementation": "Special event NPC, DIY recipe giver for space-themed items"
+    }
+  },
+  "crafting_materials": {
+    "wood": {
+      "acnh_name": "Wood",
+      "cosmic_name": "Bio-Fiber",
+      "cosmic_lore": "Organic material harvested from Xeno-Flora",
+      "source": "Xeno-Flora (trees)"
+    },
+    "hardwood": {
+      "acnh_name": "Hardwood",
+      "cosmic_name": "Dense Bio-Fiber",
+      "cosmic_lore": "Hardened organic strands from ancient Xeno-Flora",
+      "source": "Mature Xeno-Flora"
+    },
+    "softwood": {
+      "acnh_name": "Softwood",
+      "cosmic_name": "Flexible Bio-Fiber",
+      "cosmic_lore": "Pliable organic material from young Xeno-Flora",
+      "source": "Young Xeno-Flora"
+    },
+    "clay": {
+      "acnh_name": "Clay",
+      "cosmic_name": "Nano-Clay",
+      "cosmic_lore": "Programmable matter used in construction",
+      "source": "Ground excavation"
+    },
+    "stone": {
+      "acnh_name": "Stone",
+      "cosmic_name": "Moon-Rock",
+      "cosmic_lore": "Basic mineral compound found throughout the planet",
+      "source": "Rock nodes"
+    },
+    "iron_nugget": {
+      "acnh_name": "Iron Nugget",
+      "cosmic_name": "Ferrite Core",
+      "cosmic_lore": "Essential metallic element for advanced fabrication",
+      "source": "Rock nodes (rare)"
+    },
+    "gold_nugget": {
+      "acnh_name": "Gold Nugget",
+      "cosmic_name": "Aurelium Crystal",
+      "cosmic_lore": "Rare crystallized element highly valued across the galaxy",
+      "source": "Rock nodes (very rare), balloons"
+    }
+  },
+  "events": {
+    "meteor_shower": {
+      "acnh_name": "Meteor Shower",
+      "cosmic_name": "Stellar Cascade",
+      "cosmic_lore": "When nearby asteroid fields pass through, creating spectacular light shows and collectible fragments",
+      "topdown_implementation": "Timed event spawning falling star particles, press button to wish"
+    },
+    "fishing_tourney": {
+      "acnh_name": "Fishing Tourney",
+      "cosmic_name": "Energy Hunt Challenge",
+      "cosmic_lore": "Competitive event to capture the most Nebula Organisms",
+      "topdown_implementation": "Timed challenge with point system"
+    },
+    "bug_off": {
+      "acnh_name": "Bug-Off",
+      "cosmic_name": "Specimen Sprint",
+      "cosmic_lore": "Competition to collect the most Micro-Drones",
+      "topdown_implementation": "Timed challenge with point system"
+    }
+  },
+  "gameplay_systems": {
+    "diy_crafting": {
+      "acnh_name": "DIY Crafting",
+      "cosmic_name": "Molecular Fabrication",
+      "cosmic_lore": "Using a 3D printer/replicator to construct items from raw materials",
+      "topdown_implementation": "Crafting system with recipe unlocks and workbench interaction"
+    },
+    "custom_designs": {
+      "acnh_name": "Custom Designs",
+      "cosmic_name": "Holo-Patterns",
+      "cosmic_lore": "Programmable holographic designs for surfaces and clothing",
+      "topdown_implementation": "Texture customization system with grid editor"
+    },
+    "terraforming": {
+      "acnh_name": "Terraforming",
+      "cosmic_name": "Geo-Sculpting",
+      "cosmic_lore": "Using advanced technology to reshape the planet's terrain",
+      "topdown_implementation": "Tile modification system for creating/destroying terrain"
+    },
+    "happy_home_designer": {
+      "acnh_name": "House Customization",
+      "cosmic_name": "Habitat Customization",
+      "cosmic_lore": "Personalizing your modular living quarters with furniture and decorations",
+      "topdown_implementation": "Interior decoration system with grid placement"
+    }
+  }
+}
