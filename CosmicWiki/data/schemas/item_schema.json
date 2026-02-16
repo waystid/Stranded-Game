@@ -1,0 +1,217 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Cosmic Colony Wiki Item Schema",
+  "description": "Schema for all collectible items in Cosmic Colony (translated from ACNH)",
+  "type": "object",
+  "required": ["id", "acnh_data", "cosmic_data", "technical_implementation"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier (e.g., 'nebula_organism_001')"
+    },
+    "acnh_data": {
+      "type": "object",
+      "description": "Original Animal Crossing: New Horizons data",
+      "required": ["name", "category"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "ACNH item name"
+        },
+        "category": {
+          "type": "string",
+          "enum": ["fish", "bug", "fossil", "sea_creature", "diy", "furniture", "clothing", "tool", "material"]
+        },
+        "sell_price": {
+          "type": "integer",
+          "description": "Bells value in ACNH"
+        },
+        "buy_price": {
+          "type": "integer",
+          "description": "Purchase price in bells"
+        },
+        "location": {
+          "type": "string",
+          "description": "Where found in ACNH"
+        },
+        "availability": {
+          "type": "object",
+          "properties": {
+            "months_northern": {
+              "type": "array",
+              "items": {"type": "integer", "minimum": 1, "maximum": 12}
+            },
+            "months_southern": {
+              "type": "array",
+              "items": {"type": "integer", "minimum": 1, "maximum": 12}
+            },
+            "time": {
+              "type": "string",
+              "description": "e.g., '9am-4pm', 'All day'"
+            }
+          }
+        },
+        "size": {
+          "type": "string",
+          "description": "Shadow size for fish, or physical size"
+        },
+        "rarity": {
+          "type": "string",
+          "enum": ["Common", "Uncommon", "Rare", "Ultra Rare"]
+        }
+      }
+    },
+    "cosmic_data": {
+      "type": "object",
+      "description": "Translated data for Cosmic Colony universe",
+      "required": ["name", "category", "lore"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Cosmic Colony item name"
+        },
+        "category": {
+          "type": "string",
+          "description": "Cosmic equivalent category"
+        },
+        "lore": {
+          "type": "string",
+          "description": "In-universe lore description"
+        },
+        "sell_price_credits": {
+          "type": "integer",
+          "description": "Value in Credits (galactic currency)"
+        },
+        "buy_price_credits": {
+          "type": "integer",
+          "description": "Purchase price in Credits"
+        },
+        "location": {
+          "type": "string",
+          "description": "Where found in Cosmic Colony"
+        },
+        "planet_zones": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "e.g., 'Plasma Flows', 'Crater Plateaus'"
+          }
+        },
+        "spawn_conditions": {
+          "type": "object",
+          "properties": {
+            "time_of_day": {
+              "type": "string",
+              "description": "e.g., 'Dawn', 'Night', 'All day'"
+            },
+            "weather": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["Solar Storm", "Meteor Shower", "Radiation Cloud", "Clear", "Any"]
+              }
+            },
+            "season": {
+              "type": "string",
+              "description": "Planetary cycle season if applicable"
+            }
+          }
+        },
+        "energy_signature": {
+          "type": "string",
+          "description": "Size/type equivalent (Tiny, Small, Medium, Large, Massive)"
+        },
+        "rarity": {
+          "type": "string",
+          "enum": ["Common", "Uncommon", "Rare", "Ultra Rare", "Legendary"]
+        },
+        "visual_theme": {
+          "type": "object",
+          "properties": {
+            "color_palette": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "Hex colors or color names"
+            },
+            "particle_effects": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "e.g., 'glowing', 'sparkling', 'pulsing'"
+            },
+            "model_style": {
+              "type": "string",
+              "description": "Art direction notes"
+            }
+          }
+        }
+      }
+    },
+    "technical_implementation": {
+      "type": "object",
+      "description": "TopDown Engine implementation details",
+      "required": ["primary_class", "setup_steps"],
+      "properties": {
+        "primary_class": {
+          "type": "string",
+          "enum": ["PickableItem", "InventoryItem", "AIAgent", "Interactable", "Tool", "Weapon", "Environmental"],
+          "description": "Main TopDown Engine class to use"
+        },
+        "scriptable_object_type": {
+          "type": "string",
+          "description": "Specific ScriptableObject type if applicable"
+        },
+        "required_components": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Unity components needed (e.g., 'Rigidbody2D', 'Collider2D')"
+        },
+        "setup_steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "step": {"type": "integer"},
+              "description": {"type": "string"},
+              "code_example": {"type": "string"}
+            }
+          }
+        },
+        "prefab_structure": {
+          "type": "object",
+          "description": "Recommended GameObject hierarchy"
+        },
+        "integration_notes": {
+          "type": "string",
+          "description": "Additional technical considerations"
+        }
+      }
+    },
+    "wiki_metadata": {
+      "type": "object",
+      "properties": {
+        "nookipedia_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Link to original Nookipedia page"
+        },
+        "created_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "last_updated": {
+          "type": "string",
+          "format": "date"
+        },
+        "tags": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "related_items": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "IDs of related wiki entries"
+        }
+      }
+    }
+  }
+}
