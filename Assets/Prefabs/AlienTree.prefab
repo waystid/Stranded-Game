@@ -227,11 +227,11 @@ MonoBehaviour:
   OnStay:
     m_PersistentCalls:
       m_Calls: []
-  TreeModel: {fileID: 0}
+  TreeModel: {fileID: 4584485451908737629}
   ShakeDuration: 0.5
   ShakeIntensity: 10
   ShakeCooldown: 5
-  LootComponent: {fileID: 0}
+  LootComponent: {fileID: 9210297557547025500}
 --- !u!1 &2762777224735851993
 GameObject:
   m_ObjectHideFlags: 0
