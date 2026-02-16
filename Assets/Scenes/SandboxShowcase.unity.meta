@@ -1,8 +1,14 @@
 fileFormatVersion: 2
-guid: 21c9c870afc2a4801a310ec7afb65a91
-folderAsset: yes
+guid: d4dba9b3ebea24baf92bc6db9d460662
 DefaultImporter:
   externalObjects: {}
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 89636
+  packageName: TopDown Engine
+  packageVersion: 4.5
+  assetPath: Assets/TopDownEngine/Demos/Loft3D/Loft3D.unity
+  uploadId: 846008
