@@ -157,18 +157,16 @@ namespace GalacticCrossing.Editor
 
             // Create GridManager GameObject
             GameObject gridManagerObj = new GameObject("GridManager");
-            var gridManager = gridManagerObj.AddComponent<GridManager>();
+            var gridManager = gridManagerObj.AddComponent<IslandGridManager>();
 
             // Configure GridManager
-            gridManager.GridUnitSize = 1f;
-            gridManager.DrawDebugGrid = true;
-            gridManager.DebugGridSize = 30;
+            gridManager.CellSize = 1f;
 
-            // Create GridOrigin child object
+            // Create Island root child object (used as coordinate origin)
             GameObject gridOrigin = new GameObject("GridOrigin");
             gridOrigin.transform.SetParent(gridManagerObj.transform);
             gridOrigin.transform.position = Vector3.zero;
-            gridManager.GridOrigin = gridOrigin.transform;
+            gridManager.IslandRoot = gridOrigin.transform;
 
             Debug.Log("[GalacticCrossing] GridManager created and configured");
 

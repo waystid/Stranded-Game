@@ -88,6 +88,29 @@ CosmicWiki/
 │   ├── buildings/                     # Structures
 │   └── npcs/                          # Characters
 │
+├── topdown_engine/                    # TopDown Engine integration
+│   ├── README.md                      # Integration overview
+│   ├── workflows/                     # Implementation workflows
+│   │   ├── replace_player_model.md
+│   │   ├── create_pickable_item.md
+│   │   └── create_interactive_object.md
+│   ├── components/                    # Component references
+│   │   ├── character_abilities.md
+│   │   └── item_components.md
+│   └── patterns/                      # Implementation patterns
+│       └── 3_component_item.md
+│
+├── devlog/                            # Development log (Agentic tracking)
+│   ├── README.md                      # DevLog system overview
+│   ├── DEVLOG_INDEX.md                # Master index of all entries
+│   ├── devlog-agent.md                # DevLog agent documentation
+│   ├── entries/                       # Individual devlog entries
+│   │   └── 2026-02-16-player-model-replacement.md
+│   ├── templates/                     # Entry templates
+│   │   └── devlog-entry-template.md
+│   └── scripts/
+│       └── generate_devlog_index.py   # Index generator
+│
 ├── templates/
 │   └── wiki_page_template.md          # Template for new pages
 │
@@ -245,6 +268,8 @@ python CosmicWiki/scripts/generate_index.py
 
 ### TopDown Engine Integration
 
+**NEW**: Complete TopDown Engine workflows and component references in `topdown_engine/`
+
 All items are implemented using TopDown Engine classes:
 
 | Item Type | TopDown Class |
@@ -255,7 +280,57 @@ All items are implemented using TopDown Engine classes:
 | Furniture | `Interactable` |
 | NPCs | `Character` with AI |
 
-See individual wiki pages for specific implementation.
+**Quick Access**:
+```bash
+# Load TopDown Engine helpers
+source scripts/helpers/topdown_engine.sh
+
+# View available workflows
+topdown_list_workflows
+
+# Get player model swap workflow
+topdown_workflow replace_player_model
+
+# Get API documentation URL
+topdown_api Character
+```
+
+See `topdown_engine/README.md` for complete integration guide.
+
+### Development Log (DevLog)
+
+**NEW**: Agentic development tracking system in `devlog/`
+
+Track build progress, technical decisions, and implementation patterns across sessions:
+
+**Features:**
+- **Session Continuity** - Resume work with full context from previous sessions
+- **Technical Documentation** - Complete implementation details and configurations
+- **Lessons Learned** - Capture what worked, what didn't, and why
+- **Agentic Format** - Structured for AI agent reading and writing
+- **DevLog Agent** - Specialized agent for managing development logs
+
+**Quick Access**:
+```bash
+# Read latest session
+cat CosmicWiki/devlog/entries/$(ls -t CosmicWiki/devlog/entries/ | head -1)
+
+# View master index
+cat CosmicWiki/devlog/DEVLOG_INDEX.md
+
+# See all entries
+ls CosmicWiki/devlog/entries/
+```
+
+**For Claude Code Agents**:
+```
+"Load devlog agent and summarize last session"
+"Write devlog entry for today's camera controller work"
+"Find all entries about animation systems"
+```
+
+See `devlog/README.md` for complete DevLog system guide.
+See `devlog/devlog-agent.md` for DevLog Agent documentation.
 
 ---
 
