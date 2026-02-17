@@ -3507,6 +3507,101 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1190616306}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &308238736
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 308238737}
+  - component: {fileID: 308238740}
+  - component: {fileID: 308238739}
+  - component: {fileID: 308238738}
+  m_Layer: 0
+  m_Name: GridTools
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &308238737
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 308238736}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 7.5, y: -1.5, z: -9.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1918232351}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &308238738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 308238736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58ac7755a4c95490fa6248b07063c2fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FloraPlacement
+  toggleKey: 102
+  floraPrefabs:
+  - {fileID: 4738608102601343809, guid: 4f6f2d05bc4258447abfe7be72ad4328, type: 3}
+  - {fileID: 3366792504695677264, guid: 7bc2c9b0c67931b4492398c9f3a5776a, type: 3}
+  - {fileID: 6622452944958476095, guid: 0f2c7b7467d1fae4086c5ad26e2bf9d3, type: 3}
+  - {fileID: 4376218346974860220, guid: 9fa3e40f27da7e541a2220a903ee3587, type: 3}
+  floraRoot: {fileID: 407118179}
+  groundY: 0
+--- !u!114 &308238739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 308238736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec8edbd941be34ae1a852affe4558f0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TerrainPainter
+  toggleKey: 116
+  flatColor: {r: 0, g: 0, b: 0, a: 0}
+  cliffColor: {r: 0.35, g: 0.3, b: 0.25, a: 0.55}
+  waterColor: {r: 0.15, g: 0.45, b: 0.9, a: 0.55}
+  beachColor: {r: 0.9, g: 0.8, b: 0.45, a: 0.55}
+  radiationColor: {r: 0.2, g: 0.85, b: 0.2, a: 0.65}
+  overlayYOffset: 0.04
+  overlaySize: 0.96
+--- !u!114 &308238740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 308238736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0401b0481165c48a2b4c68bdaf0ccf0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GridCursor
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  useMousePosition: 1
+  quadSize: 0.98
+  yOffset: 0.02
+  walkableColor: {r: 1, g: 1, b: 1, a: 0.4}
+  blockedColor: {r: 1, g: 0.2, b: 0.2, a: 0.4}
+  isVisible: 1
 --- !u!4 &309520553 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 771734954246017056, guid: 79e89ee92d24194448a54290e1551bca,
@@ -19832,6 +19927,7 @@ Transform:
   - {fileID: 993432409}
   - {fileID: 1572385135}
   - {fileID: 1331827642}
+  - {fileID: 308238737}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1919744521 stripped
