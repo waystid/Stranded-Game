@@ -7,6 +7,7 @@
   <Project Path="SidekickCharacters.Editor.csproj" />
   <Project Path="MoreMountains.InventoryEngine.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
+  <Project Path="GiantGrey.TileWorldCreator.csproj" />
   <Project Path="MoreMountains.Interface.csproj" />
   <Project Path="CFXRRuntime.csproj" />
   <Project Path="CFXRDemo.csproj" />

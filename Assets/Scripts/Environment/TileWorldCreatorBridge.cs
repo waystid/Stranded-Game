@@ -1,54 +1,71 @@
+using System.Collections.Generic;
 using UnityEngine;
+using GiantGrey.TileWorldCreator;
 
 /// <summary>
-/// Seeds IslandGridManager cell registry from TileWorldCreator generated tile positions.
-/// Called on Start() after TWC has generated the island shape.
+/// Seeds IslandGridManager cell registry from TileWorldCreatorManager generated tile positions.
 ///
-/// DEPENDENCY: TileWorldCreator v4 must be imported before this activates.
-/// Until then the script compiles but is a no-op (guarded by TILE_WORLD_CREATOR define).
-///
-/// After TileWorldCreator is imported:
-///   1. Add the define TILE_WORLD_CREATOR to Project Settings > Player > Scripting Define Symbols
-///   2. Assign this component to the same GO as your TileWorldCreator component
+/// Attach to the same GameObject as TileWorldCreatorManager.
+/// Subscribes to OnBlueprintLayersReady so the registry is seeded immediately after generation.
+/// AutoGenerate = true triggers GenerateCompleteMap() on Start().
 /// </summary>
+[RequireComponent(typeof(TileWorldCreatorManager))]
 public class TileWorldCreatorBridge : MonoBehaviour
 {
-#if TILE_WORLD_CREATOR
     [Header("Layer Names")]
-    [Tooltip("Name of the blueprint layer that defines the island footprint.")]
-    public string islandLayerName = "IslandShape";
+    [Tooltip("Name of the blueprint layer that defines the walkable island footprint.")]
+    public string IslandLayerName = "IslandShape";
 
-    [Tooltip("Name of the water/border layer (cells outside island = water).")]
-    public string waterLayerName = "WaterBorder";
+    [Header("Options")]
+    [Tooltip("Automatically call GenerateCompleteMap() on Start().")]
+    public bool AutoGenerate = true;
+
+    private TileWorldCreatorManager _twc;
+
+    void Awake()
+    {
+        _twc = GetComponent<TileWorldCreatorManager>();
+        _twc.OnBlueprintLayersReady += OnBlueprintLayersReady;
+    }
 
     void Start()
     {
-        var twc = GetComponent<TileWorldCreator.TileWorldCreator>();
-        if (twc == null)
-        {
-            Debug.LogError("[TileWorldCreatorBridge] No TileWorldCreator component found on this GameObject.");
-            return;
-        }
+        if (AutoGenerate)
+            _twc.GenerateCompleteMap();
+    }
 
+    void OnDestroy()
+    {
+        if (_twc != null)
+            _twc.OnBlueprintLayersReady -= OnBlueprintLayersReady;
+    }
+
+    private void OnBlueprintLayersReady()
+    {
         if (IslandGridManager.Instance == null)
         {
-            Debug.LogError("[TileWorldCreatorBridge] IslandGridManager.Instance is null. Ensure it's in the scene.");
+            Debug.LogError("[TileWorldCreatorBridge] IslandGridManager.Instance is null.");
             return;
         }
 
-        // Get all generated tile positions for the island layer
-        var islandLayer = twc.GetBlueprintLayer(islandLayerName);
-        if (islandLayer == null)
+        BlueprintLayer layer = _twc.GetBlueprintLayer(IslandLayerName);
+        if (layer == null)
         {
-            Debug.LogWarning($"[TileWorldCreatorBridge] Blueprint layer '{islandLayerName}' not found.");
+            Debug.LogWarning($"[TileWorldCreatorBridge] Blueprint layer '{IslandLayerName}' not found.");
+            return;
+        }
+
+        HashSet<Vector2> positions = layer.allPositions;
+        if (positions == null || positions.Count == 0)
+        {
+            Debug.LogWarning("[TileWorldCreatorBridge] No positions on island layer after generation.");
             return;
         }
 
         int seeded = 0;
-        // TileWorldCreator layers expose tile positions as Vector2Int grid coords
-        foreach (var tilePos in islandLayer.GetTilePositions())
+        foreach (Vector2 pos in positions)
         {
-            var cell = new Vector2Int(tilePos.x, tilePos.y);
+            var cell = new Vector2Int(Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.y));
             if (IslandGridManager.Instance.IsInBounds(cell))
             {
                 IslandGridManager.Instance.SetTerrainType(cell, TerrainType.Flat);
@@ -56,18 +73,9 @@ public class TileWorldCreatorBridge : MonoBehaviour
             }
         }
 
-        Debug.Log($"[TileWorldCreatorBridge] Seeded {seeded} island cells as Flat terrain.");
+        Debug.Log($"[TileWorldCreatorBridge] Seeded {seeded} island cells as Flat terrain from '{IslandLayerName}'.");
+    }
 
-        // Mark bounds cells as Beach (perimeter of island shape)
-        // Water cells remain default until explicitly set elsewhere
-    }
-#else
-    void Awake()
-    {
-        // TileWorldCreator not yet imported — this bridge is inactive.
-        // Import TileWorldCreator v4 via Package Manager, then add
-        // TILE_WORLD_CREATOR to Scripting Define Symbols to activate.
-        Debug.Log("[TileWorldCreatorBridge] TileWorldCreator not imported yet. Bridge inactive.");
-    }
-#endif
+    /// <summary>Trigger a new map generation at runtime (e.g. from DevConsole).</summary>
+    public void Regenerate() => _twc?.GenerateCompleteMap();
 }

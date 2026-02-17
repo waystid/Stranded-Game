@@ -4701,7 +4701,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::IslandGridManager
   GridSize: 64
   CellSize: 1
-  IslandRoot: {fileID: 407118179}
+  IslandRoot: {fileID: 803663349}
 --- !u!4 &407118179
 Transform:
   m_ObjectHideFlags: 0
@@ -9901,6 +9901,67 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 131798568}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &803663346
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 803663349}
+  - component: {fileID: 803663348}
+  - component: {fileID: 803663347}
+  m_Layer: 0
+  m_Name: TileWorldCreator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &803663347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803663346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b672193aad41647c49dd60ed02ac06d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TileWorldCreatorBridge
+  IslandLayerName: IslandShape
+  AutoGenerate: 1
+--- !u!114 &803663348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803663346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff3c15772288115478645c6fc1f0c442, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: GiantGrey.TileWorldCreator::GiantGrey.TileWorldCreator.TileWorldCreatorManager
+  configuration: {fileID: 11400000, guid: 35171c34cb2ed4fa0a2f2eea796be239, type: 2}
+  showClusterCellsDebug: 0
+--- !u!4 &803663349
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803663346}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0.38268346, z: 0, w: 0.9238795}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &812946159 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4349273055983574, guid: 8a70317b2dc371542866f540c84dd1e9,
@@ -28175,3 +28236,4 @@ SceneRoots:
   - {fileID: 1360170216}
   - {fileID: 1640150887}
   - {fileID: 1590039778}
+  - {fileID: 803663349}
