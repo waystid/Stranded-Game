@@ -83,7 +83,7 @@ Character_Color_Primary_B  (float)
 
 ## Status
 
-- [ ] Phase A: SidekickPlayer.prefab model swap
+- [x] Phase A: SidekickPlayer.prefab model swap
 - [ ] Phase B: animation retarget verification
 - [ ] Phase C: CharacterCreator scene + UI
 - [ ] Phase D: in-world wardrobe (depends on Feature 005)
