@@ -88,9 +88,12 @@ public class SyntyCharacterLoader : MonoBehaviour
         }
         var animator = suitModel.GetComponent<Animator>();
 
-        // ── Extract avatar + skeleton root + all SMRs before reparenting ──────
-        var tempAnim    = tempGO.GetComponent<Animator>();
-        var syntyAvatar = tempAnim != null ? tempAnim.avatar : null;
+        // ── Extract skeleton root + all SMRs before reparenting ──────────────
+        // NOTE: We intentionally keep the existing Human-Custom-avatar on SuitModel's
+        // Animator rather than swapping to the Synty avatar. Human-Custom was exported
+        // from the same Synty rig, so bone names are identical and Rebind() will find
+        // them in the new hierarchy. Swapping the avatar caused silent humanoid
+        // retargeting failure (T-pose) because the Synty avatar was bound to tempGO.
         var skeletonRoot = tempGO.transform.Find("root");
         var smrs = tempGO.GetComponentsInChildren<SkinnedMeshRenderer>(true);
 
@@ -110,10 +113,9 @@ public class SyntyCharacterLoader : MonoBehaviour
         foreach (var smr in smrs)
             smr.transform.SetParent(container.transform, false);
 
-        // ── Rebind Animator to new skeleton ───────────────────────────────────
+        // ── Rebind Animator to new skeleton (same avatar, new bone transforms) ─
         if (animator != null)
         {
-            if (syntyAvatar != null) animator.avatar = syntyAvatar;
             animator.Rebind();
             animator.Update(0f);
         }
