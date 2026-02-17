@@ -7,37 +7,23 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Feature 007 Phase D — Swaps the baked HumanCustomMesh with a SidekickRuntime-built
+/// Feature 007 Phase D+E — Swaps the baked HumanCustomMesh with a SidekickRuntime-built
 /// character assembled from the player's saved preset indices (head / upper / lower body).
 ///
-/// Runs in Awake() — before TDE's CharacterAnimator.Start() initialises — so the swap
-/// is invisible to TDE and all gameplay components work unchanged.
+/// Phase D: Runs in Awake() — before TDE's CharacterAnimator.Start() — swap is invisible to TDE.
+/// Phase E: Exposes public SwapMesh(PlayerCharacterData) so WardrobeUI can hot-swap mid-game.
 ///
 /// Avatar: uses SK_BaseModel avatar (loaded from Resources prefab asset) which exactly
 /// matches the Synty skeleton bone names. Human-Custom-avatar bone names differ from
 /// the raw Synty rig and caused silent Rebind() failure (T-pose).
 ///
-/// DestroyImmediate: old HumanCustomMesh must be destroyed immediately (not deferred)
+/// DestroyImmediate: old mesh must be destroyed immediately (not deferred)
 /// so Rebind() does not bind to the old skeleton bones before they disappear.
-///
-/// After Awake() returns:
-///   CharacterCustomizer.Start()  → finds new SMRs → applies saved colors. ✅
-///   CharacterAnimator.Start()    → finds Animator on SuitModel with rebound skeleton. ✅
 ///
 /// Attach to HumanCustomPlayer root alongside CharacterCustomizer.
 /// </summary>
 public class SyntyCharacterLoader : MonoBehaviour
 {
-    // ── Synty runtime state ───────────────────────────────────────────────────
-
-    private DatabaseManager _dbManager;
-    private SidekickRuntime _runtime;
-    private Dictionary<CharacterPartType, Dictionary<string, SidekickPart>> _partLibrary;
-
-    private List<SidekickPartPreset> _headPresets  = new List<SidekickPartPreset>();
-    private List<SidekickPartPreset> _upperPresets = new List<SidekickPartPreset>();
-    private List<SidekickPartPreset> _lowerPresets = new List<SidekickPartPreset>();
-
     // ── Lifecycle ─────────────────────────────────────────────────────────────
 
     void Awake()
@@ -46,9 +32,19 @@ public class SyntyCharacterLoader : MonoBehaviour
 
         var data = ScriptableObject.CreateInstance<PlayerCharacterData>();
         data.Load();
+        SwapMesh(data);
+    }
 
+    // ── Public API ────────────────────────────────────────────────────────────
+
+    /// <summary>
+    /// Hot-swap the character mesh to match the given PlayerCharacterData.
+    /// Safe to call at runtime (mid-game). Re-swaps destroy the previous SidekickMesh first.
+    /// </summary>
+    public void SwapMesh(PlayerCharacterData data)
+    {
         // ── Init Synty runtime ────────────────────────────────────────────────
-        _dbManager = new DatabaseManager();
+        var dbManager = new DatabaseManager();
 
         var baseModel = Resources.Load<GameObject>("Meshes/SK_BaseModel");
         var baseMat   = Resources.Load<Material>("Materials/M_BaseMaterial");
@@ -59,24 +55,23 @@ public class SyntyCharacterLoader : MonoBehaviour
             return;
         }
 
-        // Load the SK_BaseModel avatar from the prefab asset — this exactly describes
-        // the Synty bone hierarchy and avoids the Human-Custom-avatar bone name mismatch.
+        // SK_BaseModel avatar exactly describes the Synty bone hierarchy.
         var skBaseAvatar = baseModel.GetComponent<Animator>()?.avatar;
 
-        _runtime    = new SidekickRuntime(baseModel, baseMat, null, _dbManager);
-        SidekickRuntime.PopulateToolData(_runtime);
-        _partLibrary = _runtime.MappedPartDictionary;
+        var runtime = new SidekickRuntime(baseModel, baseMat, null, dbManager);
+        SidekickRuntime.PopulateToolData(runtime);
+        var partLibrary = runtime.MappedPartDictionary;
 
         // ── Load preset lists ─────────────────────────────────────────────────
-        _headPresets  = SidekickPartPreset.GetAllByGroup(_dbManager, PartGroup.Head);
-        _upperPresets = SidekickPartPreset.GetAllByGroup(_dbManager, PartGroup.UpperBody);
-        _lowerPresets = SidekickPartPreset.GetAllByGroup(_dbManager, PartGroup.LowerBody);
+        var headPresets  = SidekickPartPreset.GetAllByGroup(dbManager, PartGroup.Head);
+        var upperPresets = SidekickPartPreset.GetAllByGroup(dbManager, PartGroup.UpperBody);
+        var lowerPresets = SidekickPartPreset.GetAllByGroup(dbManager, PartGroup.LowerBody);
 
         // ── Collect parts from saved preset indices ───────────────────────────
         var parts = new List<SkinnedMeshRenderer>();
-        CollectPresetParts(_headPresets,  data.headPresetIndex,       parts);
-        CollectPresetParts(_upperPresets, data.upperBodyPresetIndex,   parts);
-        CollectPresetParts(_lowerPresets, data.lowerBodyPresetIndex,   parts);
+        CollectPresetParts(dbManager, partLibrary, headPresets,  data.headPresetIndex,      parts);
+        CollectPresetParts(dbManager, partLibrary, upperPresets, data.upperBodyPresetIndex,  parts);
+        CollectPresetParts(dbManager, partLibrary, lowerPresets, data.lowerBodyPresetIndex,  parts);
 
         if (parts.Count == 0)
         {
@@ -85,7 +80,7 @@ public class SyntyCharacterLoader : MonoBehaviour
         }
 
         // ── Spawn temp character (off-screen) ─────────────────────────────────
-        var tempGO = _runtime.CreateCharacter("_SidekickTemp", parts, false, true);
+        var tempGO = runtime.CreateCharacter("_SidekickTemp", parts, false, true);
         if (tempGO == null) return;
         tempGO.transform.position = new Vector3(9999f, 9999f, 9999f);
 
@@ -103,7 +98,11 @@ public class SyntyCharacterLoader : MonoBehaviour
         var skeletonRoot = tempGO.transform.Find("root");
         var smrs = tempGO.GetComponentsInChildren<SkinnedMeshRenderer>(true);
 
-        // ── Remove old baked mesh (DestroyImmediate so it's gone before Rebind) ─
+        // ── Remove previous SidekickMesh (re-swap) AND old baked mesh ────────
+        // DestroyImmediate so bones are gone before Rebind().
+        var existingSidekick = suitModel.Find("SidekickMesh");
+        if (existingSidekick != null) DestroyImmediate(existingSidekick.gameObject);
+
         var oldMesh = suitModel.Find("HumanCustomMesh");
         if (oldMesh != null) DestroyImmediate(oldMesh.gameObject);
 
@@ -134,14 +133,19 @@ public class SyntyCharacterLoader : MonoBehaviour
         Debug.Log("[SyntyCharacterLoader] Visual swap complete.");
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
+    // ── Private helpers ───────────────────────────────────────────────────────
 
-    private void CollectPresetParts(List<SidekickPartPreset> presets, int idx, List<SkinnedMeshRenderer> result)
+    private static void CollectPresetParts(
+        DatabaseManager dbManager,
+        Dictionary<CharacterPartType, Dictionary<string, SidekickPart>> partLibrary,
+        List<SidekickPartPreset> presets,
+        int idx,
+        List<SkinnedMeshRenderer> result)
     {
         if (presets == null || presets.Count == 0) return;
         idx = Mathf.Clamp(idx, 0, presets.Count - 1);
 
-        var rows = SidekickPartPresetRow.GetAllByPreset(_dbManager, presets[idx]);
+        var rows = SidekickPartPresetRow.GetAllByPreset(dbManager, presets[idx]);
         foreach (var row in rows)
         {
             if (string.IsNullOrEmpty(row.PartName)) continue;
@@ -149,8 +153,8 @@ public class SyntyCharacterLoader : MonoBehaviour
             {
                 var typeName = Synty.SidekickCharacters.Utils.CharacterPartTypeUtils.GetTypeNameFromShortcode(row.PartType);
                 var type     = Enum.Parse<CharacterPartType>(typeName);
-                if (!_partLibrary.ContainsKey(type)) continue;
-                var dict = _partLibrary[type];
+                if (!partLibrary.ContainsKey(type)) continue;
+                var dict = partLibrary[type];
                 if (!dict.ContainsKey(row.PartName)) continue;
                 var partGO = dict[row.PartName].GetPartModel();
                 if (partGO == null) continue;
