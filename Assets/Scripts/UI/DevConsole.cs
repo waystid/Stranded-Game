@@ -416,8 +416,8 @@ public class DevConsole : MonoBehaviour
         vpRect.anchorMax = Vector2.one;
         vpRect.sizeDelta = Vector2.zero;
         vpRect.pivot     = new Vector2(0.5f, 1f);
-        vpGO.AddComponent<Image>().color = Color.clear;
-        vpGO.AddComponent<Mask>().showMaskGraphic = false;
+        vpGO.AddComponent<Image>().color = Color.white; // alpha=1 needed for mask to work
+        vpGO.AddComponent<Mask>().showMaskGraphic = false; // don't render the white image
         sr.viewport = vpRect;
 
         // Content
@@ -432,7 +432,7 @@ public class DevConsole : MonoBehaviour
         var vlg = contentGO.AddComponent<VerticalLayoutGroup>();
         vlg.padding            = new RectOffset(8, 8, 6, 8);
         vlg.spacing            = 4f;
-        vlg.childControlHeight = false;
+        vlg.childControlHeight = true;
         vlg.childControlWidth  = true;
         vlg.childForceExpandHeight = false;
         vlg.childForceExpandWidth  = true;
@@ -472,7 +472,11 @@ public class DevConsole : MonoBehaviour
         var resetBtn = AddFullButton(contentGO, "↺  Reset Defaults", new Color(0.25f, 0.15f, 0.15f, 1f));
         resetBtn.onClick.AddListener(ResetDefaults);
 
-        // Start hidden
+        // Force layout rebuild so ContentSizeFitter calculates immediately in Awake
+        Canvas.ForceUpdateCanvases();
+        LayoutRebuilder.ForceRebuildLayoutImmediate(contentRect);
+
+        // Start hidden; toggle with backtick or the corner button
         SetPanelVisible(false);
     }
 
@@ -611,8 +615,9 @@ public class DevConsole : MonoBehaviour
         var hlg = rowGO.AddComponent<HorizontalLayoutGroup>();
         hlg.spacing            = 8f;
         hlg.childControlHeight = true;
-        hlg.childControlWidth  = false;
+        hlg.childControlWidth  = true;
         hlg.childForceExpandHeight = true;
+        hlg.childForceExpandWidth  = false;
 
         // Checkbox box
         var boxGO = MakeRect("Box", rowGO.transform);
