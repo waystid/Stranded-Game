@@ -4,17 +4,21 @@
   <Project Path="MoreMountains.Tools.Editor.csproj" />
   <Project Path="MoreMountains.TopDownEngine.csproj" />
   <Project Path="FlatKit.Utils.Editor.csproj" />
+  <Project Path="SidekickCharacters.Editor.csproj" />
   <Project Path="MoreMountains.InventoryEngine.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
   <Project Path="MoreMountains.Interface.csproj" />
   <Project Path="CFXRRuntime.csproj" />
   <Project Path="CFXRDemo.csproj" />
   <Project Path="CFXREditor.csproj" />
+  <Project Path="SidekickCharacters.csproj" />
   <Project Path="MoreMountains.InventoryEngine.Editor.csproj" />
+  <Project Path="Gilzoide.SqliteNet.csproj" />
   <Project Path="KinoBloom.Runtime.csproj" />
   <Project Path="MoreMountains.TopDownEngine.InputSystem.csproj" />
   <Project Path="MoreMountains.TopDownEngine.Editor.csproj" />
   <Project Path="CFXR.WelcomeScreen.csproj" />
+  <Project Path="Gilzoide.SqliteNet.Tests.Editor.csproj" />
   <Project Path="ToonyColorsPro.Demo.Editor.csproj" />
   <Project Path="MoreMountains.Interface.Editor.csproj" />
 </Solution>
