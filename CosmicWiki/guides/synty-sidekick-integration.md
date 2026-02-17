@@ -11,33 +11,54 @@ See `CosmicWiki/agents/synty-sidekick-agent.md` for asset paths, shader properti
 
 ## Implementation Phases
 
-### Phase A: Model Swap
-1. Duplicate `Assets/Prefabs/AstronautPlayer.prefab` → `SidekickPlayer.prefab`
-2. In `SidekickPlayer`: replace `SkinnedMeshRenderer` with HumanSpecies01 mesh
-3. Update `Animator.avatar` to Sidekick Humanoid avatar
-4. Verify all `CharacterAbilities` still present and functional
-5. Test in PlayMode: walk, run, jump, interact
+### ✅ Phase A: SidekickPlayer + Synty Mesh (Complete)
 
-### Phase B: Animation Retarget
-1. Mecanim auto-retargets if both FBXs use Humanoid rig — no clip copying needed
-2. Wire Kevin Iglesias tool animations (Feature 006 dependency)
-3. Test animation blending: idle→walk→run, jump, gather
+1. ✅ Duplicated `AstronautPlayer.prefab` → `SidekickPlayer.prefab`
+2. ✅ Added `HumanSpecies_01.prefab` as nested `SyntyMesh` under `SuitModel`
+3. ✅ Updated `Animator.avatar` → `HumanSpecies_01-avatar.asset`
+4. ✅ Added `CharacterCustomizer.cs` for runtime shader color application
+5. ✅ Verified all TDE `CharacterAbilities` intact
 
-### Phase C: Character Creator Scene
-1. Create `Assets/Scenes/CharacterCreator.unity`
-2. UI elements:
-   - Rotating character preview (RenderTexture → RawImage)
-   - Species selector: HumanSpecies01–04, Starter01–04 (8 options)
-   - Color pickers: Skin Tone, Hair Color, Outfit Primary, Outfit Secondary
-   - Name input field (max 12 chars)
-   - [Begin Adventure] button
-3. Confirm → save to PlayerPrefs → `SceneManager.LoadScene("SandboxShowcase")`
+### ✅ Phase A+: Animation Retarget + HumanCustomPlayer (Complete)
 
-### Phase D: In-World Wardrobe
+1. ✅ Confirmed Synty Sidekick exports use Humanoid avatars — Mecanim retargeting works with zero config
+2. ✅ Exported randomized Synty character → `Assets/Synty/Exports/Human-Custom/`
+3. ✅ Created `HumanCustomPlayer.prefab` (SidekickPlayer stack + Human-Custom mesh)
+4. ✅ SandboxShowcase now spawns `HumanCustomPlayer`
+5. ✅ Fixed avatarRoot bug (deleted SyntyMesh instead of disabling — see agent notes)
+
+**Key file:** `Assets/Prefabs/HumanCustomPlayer.prefab`
+**Devlog:** `CosmicWiki/devlog/entries/2026-02-17-synty-character-integration.md`
+
+### 📋 Phase B: In-Game Part Picker (Next)
+
+Replace the static color-swatch `CharacterCreatorUI.cs` with a real part picker
+driven by the Synty part library — letting players pick head, body, legs, hair.
+
+**Full plan:** `CosmicWiki/guides/feature-007-phase-b-plan.md`
+
+**Start checklist:**
+1. Read `Assets/Synty/SidekickCharacters/Scripts/` — find runtime API
+2. Glob `HumanSpecies_01` parts directory — inventory available meshes
+3. Build `SyntyPartSwapper.cs` (or wrap Synty API)
+4. Build `CharacterCreatorController.cs` + UI
+5. Wire save/load to `PlayerCharacterData`
+
+### 📋 Phase C: Character Creator Scene (Full UI)
+
+1. Set up `Assets/Scenes/CharacterCreator.unity` (camera, lights, UI canvas)
+2. Part picker panels (head, upper body, lower body, hair, accessories)
+3. Color pickers — Skin Tone, Hair, Outfit Primary, Outfit Secondary
+4. Name input (max 12 chars)
+5. Species selector (HumanSpecies01–04, Starter01–04)
+6. [Begin Adventure] → `PlayerCharacterData.Save()` → `LoadScene("SandboxShowcase")`
+
+### 🔮 Phase D: In-World Wardrobe (Future)
+
 1. Depends on Feature 005 (Nano-Fabricator building)
-2. Interact (E) → loads CharacterCreator scene in "edit mode"
-3. Edit mode: color pickers only — no species or name change
-4. Apply → update `CharacterCustomizer` on active player
+2. Interact (E) → opens CharacterCreator in "edit mode"
+3. Edit mode: color/parts only — no name change
+4. Apply → update live player via `CharacterCustomizer` + `SyntyPartSwapper`
 
 ## Color System
 

@@ -129,14 +129,59 @@ Reference prefab: `Assets/Prefabs/AstronautPlayer.prefab`
 
 ---
 
+## Export Pipeline (Synty Sidekick Character Tool)
+
+The Synty Character Tool exports a complete character package:
+```
+Assets/Synty/Exports/{CharacterName}/
+  {CharacterName}.prefab          ← instantiate this as HumanCustomMesh under SuitModel
+  {CharacterName}.sk              ← save file — re-open in tool to edit
+  Meshes/{CharacterName}.asset    ← combined SkinnedMeshRenderer mesh
+  Meshes/{CharacterName}-avatar.asset  ← Humanoid avatar (isHuman: true)
+  Materials/{CharacterName}.mat   ← baked material
+  Textures/T_{CharacterName}ColorMap.png  ← baked color atlas (not runtime-recolorable)
+```
+
+**Important:** Exported characters are baked meshes — colors are fixed in the atlas.
+For runtime color customization, use the modular `HumanSpecies_01.prefab` instead.
+
+## avatarRoot Discovery — Critical Pattern
+
+When multiple skeleton GOs exist under an Animator:
+- Unity scans ALL descendants (including `setActive(false)` ones) during avatarRoot binding
+- The first GO with matching bone children is chosen as avatarRoot
+- **Always DELETE old skeleton GOs — never just disable them**
+
+```
+// WRONG — disabled SyntyMesh will still be found as avatarRoot
+SyntyMesh.SetActive(false);   ← avatarRoot binds here anyway
+
+// CORRECT — delete it entirely
+Destroy(SyntyMesh);           ← avatarRoot binds to HumanCustomMesh ✓
+```
+
+## HumanCustomPlayer Prefab Structure
+
+```
+HumanCustomPlayer (root — 20 TDE components)
+  └─ SuitModel (Animator + Human-Custom-avatar + WeaponIK + CharacterAnimationFeedbacks)
+       ├─ WeaponAttachmentContainer / WeaponAttachment
+       ├─ Feedbacks (Walk/Run/Damage/Death)
+       └─ HumanCustomMesh  ← exported Synty character (NO Animator — SuitModel drives it)
+```
+
 ## Implementation Phases (Feature 007)
 
-| Phase | Task | Script |
-|-------|------|--------|
-| A | Model swap: replace AstronautPlayer mesh | `CharacterCustomizer.cs` |
-| B | Animation retarget to Sidekick rig | Animator Controller update |
-| C | Character Creator UI scene | `CharacterCreatorUI.cs` |
-| D | In-world wardrobe (Nano-Fabricator) | `BuildingInterior.cs` integration |
+| Phase | Task | Status | Script |
+|-------|------|--------|--------|
+| A | SidekickPlayer: Synty mesh swap + CharacterCustomizer | ✅ Complete | `CharacterCustomizer.cs` |
+| A+ | Animation retarget verified (Humanoid, zero config) | ✅ Complete | ColonelAnimator controller |
+| A+ | HumanCustomPlayer: Synty export as sandbox player | ✅ Complete | `Assets/Prefabs/HumanCustomPlayer.prefab` |
+| B | In-game part picker (head/body/legs from Synty library) | 📋 Planned | `SyntyPartSwapper.cs` (new) |
+| C | Character Creator scene (full UI — part picker + colors + name) | 📋 Planned | `CharacterCreatorController.cs` |
+| D | In-world wardrobe (Nano-Fabricator) | 🔮 Future | Depends on Feature 005 |
+
+**Phase B plan:** `CosmicWiki/guides/feature-007-phase-b-plan.md`
 
 ---
 
