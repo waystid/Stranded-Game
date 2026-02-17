@@ -126,7 +126,7 @@ GameObject:
   - component: {fileID: 8888888888}
   - component: {fileID: 7777777778}
   m_Layer: 0
-  m_Name: EnergyCrystalPicker
+  m_Name: StardustPicker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -160,7 +160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86fd837a0abc28d4d91c55590bd2c090, type: 3}
   m_Name: 
   m_EditorClassIdentifier: MoreMountains.InventoryEngine::MoreMountains.InventoryEngine.ItemPicker
-  Item: {fileID: 11400000, guid: 5ac691c3874e840cc92ed4b5f6540958, type: 2}
+  Item: {fileID: 11400000, guid: 5fe7cbd27469d457b983a4b7572bcac5, type: 2}
   Quantity: 1
   RemainingQuantity: 1
   PickableIfInventoryIsFull: 0
