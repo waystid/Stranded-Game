@@ -36,6 +36,10 @@ public class GridCursor : MonoBehaviour
     [Tooltip("Toggle cursor visibility from DevConsole or gameplay code.")]
     public bool isVisible = true;
 
+    // ── Singleton ─────────────────────────────────────────────────────────────
+
+    public static GridCursor Instance { get; private set; }
+
     // ── Runtime State ─────────────────────────────────────────────────────────
 
     /// <summary>The grid cell currently under the cursor. (-999,-999) = no hit.</summary>
@@ -58,6 +62,12 @@ public class GridCursor : MonoBehaviour
 
     void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
         _cam = Camera.main;
         CreateHighlightQuad();
     }
