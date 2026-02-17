@@ -5450,6 +5450,7 @@ GameObject:
   - component: {fileID: 5129353781003461332}
   - component: {fileID: 2620107355314861742}
   - component: {fileID: 4971857946076290620}
+  - component: {fileID: 1053568042596529538}
   m_Layer: 10
   m_Name: HumanCustomPlayer
   m_TagString: Player
@@ -6133,6 +6134,18 @@ MonoBehaviour:
   defaultHair: {r: 0.2, g: 0.12, b: 0.06, a: 1}
   defaultPrimary: {r: 0.2, g: 0.4, b: 0.75, a: 1}
   defaultSecondary: {r: 0.9, g: 0.9, b: 0.9, a: 1}
+--- !u!114 &1053568042596529538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1706209625301063421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b1f7d50a574945b6943f4f8d4de1161, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SyntyCharacterLoader
 --- !u!1 &1727787714843690400
 GameObject:
   m_ObjectHideFlags: 0

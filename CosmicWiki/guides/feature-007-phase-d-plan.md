@@ -1,6 +1,6 @@
 # Feature 007 Phase D — In-Game SidekickRuntime Visual Loader
 
-**Status:** 📋 Planned
+**Status:** ✅ Complete
 **Branch:** features/007-character-creator
 **Prerequisite:** Phase C complete ✅
 **Session estimate:** 1 session
@@ -291,16 +291,16 @@ public class SyntyCharacterLoader : MonoBehaviour
 
 ## Session Checklist
 
-- [ ] Create `SyntyCharacterLoader.cs` (code skeleton above)
-- [ ] `validate_script` — confirm 0 compile errors
-- [ ] Add `SyntyCharacterLoader` component to `HumanCustomPlayer.prefab` root
-- [ ] Open `SandboxShowcase`, enter Play mode
-- [ ] Screenshot: character appears with correct preset parts
-- [ ] Confirm animation plays (idle, walk)
-- [ ] Confirm colors applied (CharacterCustomizer fires after Awake)
-- [ ] Confirm scale correct (same apparent height as before)
-- [ ] Check console — 0 errors
-- [ ] Commit + push
+- [x] Create `SyntyCharacterLoader.cs` (code skeleton above)
+- [x] `validate_script` — confirm 0 compile errors
+- [x] Add `SyntyCharacterLoader` component to `HumanCustomPlayer.prefab` root
+- [x] Open `SandboxShowcase`, enter Play mode
+- [x] Screenshot: character appears with correct preset parts
+- [x] Confirm animation plays (idle, walk)
+- [x] Confirm colors applied (CharacterCustomizer fires after Awake)
+- [x] Confirm scale correct (same apparent height as before)
+- [x] Check console — 0 errors (`[SyntyCharacterLoader] Visual swap complete.`)
+- [x] Commit + push
 
 ---
 
