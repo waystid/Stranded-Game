@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -7,6 +8,8 @@ using UnityEngine;
 ///
 /// All grid coordinates are in "island local space" — integer cells from (-32,-32)
 /// to (31,31). Cell (0,0) is the island center.
+///
+/// Also owns the GridCell registry (terrain type, occupancy, height per cell).
 /// </summary>
 public class IslandGridManager : MonoBehaviour
 {
@@ -21,6 +24,11 @@ public class IslandGridManager : MonoBehaviour
 
     [Tooltip("The Island parent Transform (rotated 45° on Y).")]
     public Transform IslandRoot;
+
+    // ── Cell Registry ─────────────────────────────────────────────────────────
+
+    // Lazy-initialised dictionary; cells not in the dict are treated as default Flat.
+    private readonly Dictionary<Vector2Int, GridCell> _cells = new Dictionary<Vector2Int, GridCell>();
 
     // ── Lifecycle ─────────────────────────────────────────────────────────────
 
@@ -75,6 +83,38 @@ public class IslandGridManager : MonoBehaviour
         int half = GridSize / 2;
         return cell.x >= -half && cell.x < half &&
                cell.y >= -half && cell.y < half;
+    }
+
+    // ── Cell Registry API ─────────────────────────────────────────────────────
+
+    /// <summary>
+    /// Get the GridCell data for a cell. Returns a new default Flat cell if not yet set.
+    /// </summary>
+    public GridCell GetCell(Vector2Int cell)
+    {
+        if (_cells.TryGetValue(cell, out GridCell existing))
+            return existing;
+        // Lazily create default cell
+        var newCell = new GridCell(TerrainType.Flat);
+        _cells[cell] = newCell;
+        return newCell;
+    }
+
+    /// <summary>
+    /// Set or replace the GridCell data for a cell.
+    /// </summary>
+    public void SetCell(Vector2Int cell, GridCell data)
+    {
+        if (IsInBounds(cell))
+            _cells[cell] = data;
+    }
+
+    /// <summary>
+    /// Set just the terrain type for an existing cell (creates default if absent).
+    /// </summary>
+    public void SetTerrainType(Vector2Int cell, TerrainType type)
+    {
+        GetCell(cell).terrainType = type;
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────
