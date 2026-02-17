@@ -24,12 +24,22 @@ public class FurnitureItem : CosmicItem
     }
 
     /// <summary>
-    /// Entering placement mode is a Feature 005 responsibility.
-    /// Returns false so the item is NOT consumed — player keeps it until placed.
+    /// Opens placement mode via PlacementController.
+    /// Returns false — item is NOT consumed until placement is confirmed.
     /// </summary>
     public override bool Use(string playerID)
     {
-        Debug.Log("[FurnitureItem] Placement mode stub — Feature 005 will implement PlacementController");
-        return false;
+        PlacementController pc = PlacementController.Instance;
+        if (pc == null)
+            pc = Object.FindObjectOfType<PlacementController>();
+
+        if (pc == null)
+        {
+            Debug.LogWarning("[FurnitureItem] PlacementController not found in scene.");
+            return false;
+        }
+
+        pc.BeginPlacement(this);
+        return false; // consumed on confirm, not on Use
     }
 }
