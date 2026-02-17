@@ -1,6 +1,6 @@
 # Feature 007 Phase B — In-Game Synty Character Customizer
 
-**Status:** 📋 Planned
+**Status:** 🚧 In Progress (Session 1 complete)
 **Branch:** features/007-character-creator
 **Prerequisite:** Phase A complete (SidekickPlayer + CharacterCustomizer ✅)
 
@@ -266,21 +266,46 @@ void Start()
 
 ## Session Start Checklist
 
-When beginning Phase B:
+### Session 1 (2026-02-17) — Scripts Done ✅
 
-1. `[ ]` Read `Assets/Synty/SidekickCharacters/Scripts/` — find runtime API
-2. `[ ]` Glob HumanSpecies_01 parts directory — inventory available meshes
-3. `[ ]` Decide: use Synty API or build SyntyPartSwapper
-4. `[ ]` Set up CharacterCreator scene (camera, lights)
-5. `[ ]` Build SyntyPartSwapper first (core system)
-6. `[ ]` Wire up CharacterCreatorController
-7. `[ ]` Build UI layout
-8. `[ ]` Test part swapping live in scene
-9. `[ ]` Wire save/load to SandboxShowcase
+1. `[x]` Read `Assets/Synty/SidekickCharacters/Scripts/` — found `SidekickRuntime` + `DatabaseManager`
+2. `[x]` Glob HumanSpecies_01 — single-mesh prefab; presets come from SQLite DB content packs
+3. `[x]` Decision: **use SidekickRuntime.CreateCharacter() with preset groups** (no custom SwapMesh needed)
+4. `[ ]` Set up CharacterCreator scene (camera, lights, UI canvas) — **NEXT SESSION**
+5. `[x]` Core system: **CharacterCreatorController.cs** (`Assets/Scripts/UI/CharacterCreatorController.cs`)
+   - Uses `DatabaseManager` + `SidekickRuntime.PopulateToolData()`
+   - Loads `SidekickPartPreset` lists by `PartGroup.Head/UpperBody/LowerBody`
+   - Prev/next buttons per group, color swatches, name input, "Begin Adventure"
+   - Live preview via `CreateCharacter()` — destroy+recreate on each change (fine in creator scene)
+   - Saves `headPresetIndex`, `upperBodyPresetIndex`, `lowerBodyPresetIndex` to `PlayerCharacterData`
+6. `[x]` `PlayerCharacterData.cs` extended — 3 preset index fields + KEY constants + Save/Load
+7. `[x]` Build UI layout in CharacterCreator.unity (Session 2 — 2026-02-17)
+   - Camera (0,1.6,-3.5), Directional Light, PreviewRoot, EventSystem
+   - Canvas (1920×1080 CanvasScaler) with LeftPanel (part pickers) + RightPanel (color swatches) + BottomPanel
+   - AutoWire() finds all named elements scene-wide, no inspector wiring needed
+   - 32 swatch buttons (8×4), 3 preset picker rows with < label > layout8. `[x]` Test part swapping live in scene — **SESSION 2 CONFIRMED WORKING**
+   - SidekickRuntime loaded DB, created character with Fantasy Knight preset
+   - PreviewRoot rotation working (40°/s)
+   - No runtime errors
+9. `[ ]` Wire save/load to SandboxShowcase — **NEXT SESSION (Phase C)**
 10. `[ ]` Polish and commit
+
+### Key Finding: No Custom SyntyPartSwapper Needed
+
+`SidekickRuntime.CreateCharacter()` + `SidekickPartPreset` by group is the correct pattern. The demo `RuntimeColorDemo.cs` shows exactly this. No need for `SyntyPartDatabase.cs` or `SyntyPartSwapper.cs`.
+
+Updated File Plan:
+
+| File | Status | Notes |
+|------|--------|-------|
+| `Assets/Scripts/UI/CharacterCreatorController.cs` | ✅ Done | Phase B controller, preset-based |
+| `Assets/Scripts/Character/PlayerCharacterData.cs` | ✅ Done | +3 preset index fields + secondary color save |
+| `Assets/Scenes/CharacterCreator.unity` | 🔲 Next | Camera, lights, UI canvas, wire buttons |
+| `Assets/Prefabs/HumanCustomPlayer.prefab` | Keep | SandboxShowcase player |
 
 ---
 
 **Plan Created:** 2026-02-17
-**Estimated Sessions:** 2–3
-**Complexity:** Medium-High (depends on Synty runtime API availability)
+**Session 1 Completed:** 2026-02-17
+**Estimated Sessions Remaining:** 1–2
+**Complexity:** Medium (API pattern is clear, remaining work is scene setup + wiring)
