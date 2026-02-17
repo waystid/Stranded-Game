@@ -40,7 +40,7 @@ MonoBehaviour:
   tileColliderExtrusionHeight: 0
   invertCollisionWalls: 0
   tilePresetsTop:
-  - preset: {fileID: 11400000, guid: 54472b666a0681445a0d3c8074b96faa, type: 2}
+  - preset: {fileID: 11400000, guid: e6decb8e0bd11314cbe8173581d68379, type: 2}
     tileHeight: 0
     weight: 1
   tilePresetsMiddle: []
