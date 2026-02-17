@@ -110,7 +110,7 @@ namespace GalacticCrossing.Editor
             }
         }
 
-        [MenuItem(MENU_PATH + "Validate Setup", false, 200)]
+        [MenuItem(MENU_PATH + "Open Setup Window", false, 200)]
         public static void ValidateSetup()
         {
             ShowWindow();
