@@ -30,35 +30,44 @@ See `CosmicWiki/agents/synty-sidekick-agent.md` for asset paths, shader properti
 **Key file:** `Assets/Prefabs/HumanCustomPlayer.prefab`
 **Devlog:** `CosmicWiki/devlog/entries/2026-02-17-synty-character-integration.md`
 
-### 📋 Phase B: In-Game Part Picker (Next)
+### ✅ Phase B: In-Game Part Picker (Complete)
 
-Replace the static color-swatch `CharacterCreatorUI.cs` with a real part picker
-driven by the Synty part library — letting players pick head, body, legs, hair.
+Replaced `CharacterCreatorUI.cs` with `CharacterCreatorController.cs` driven by
+`SidekickRuntime` + preset groups. Head / UpperBody / LowerBody prev-next pickers,
+4-channel color swatches, name input, Begin Adventure button.
 
-**Full plan:** `CosmicWiki/guides/feature-007-phase-b-plan.md`
+**Full plan + session notes:** `CosmicWiki/guides/feature-007-phase-b-plan.md`
 
-**Start checklist:**
-1. Read `Assets/Synty/SidekickCharacters/Scripts/` — find runtime API
-2. Glob `HumanSpecies_01` parts directory — inventory available meshes
-3. Build `SyntyPartSwapper.cs` (or wrap Synty API)
-4. Build `CharacterCreatorController.cs` + UI
-5. Wire save/load to `PlayerCharacterData`
+**Key files:**
+- `Assets/Scripts/UI/CharacterCreatorController.cs` — Phase B controller
+- `Assets/Scenes/CharacterCreator.unity` — built from scratch (Camera, Canvas, PreviewRoot)
 
-### 📋 Phase C: Character Creator Scene (Full UI)
+### ✅ Phase C: SandboxShowcase Save/Load Integration (Complete)
 
-1. Set up `Assets/Scenes/CharacterCreator.unity` (camera, lights, UI canvas)
-2. Part picker panels (head, upper body, lower body, hair, accessories)
-3. Color pickers — Skin Tone, Hair, Outfit Primary, Outfit Secondary
-4. Name input (max 12 chars)
-5. Species selector (HumanSpecies01–04, Starter01–04)
-6. [Begin Adventure] → `PlayerCharacterData.Save()` → `LoadScene("SandboxShowcase")`
+1. ✅ `CharacterCreator` + `SandboxShowcase` added to Build Settings (indices 44/45)
+2. ✅ `PlayerNameDisplay.cs` — reads saved name from PlayerPrefs, shows in HUD
+3. ✅ Colors wired: `CharacterCustomizer` on `HumanCustomPlayer` loads PlayerPrefs at `Start()`
+4. ✅ Scene flow: CharacterCreator → Begin Adventure → SandboxShowcase confirmed
 
-### 🔮 Phase D: In-World Wardrobe (Future)
+**Limitation:** `HumanCustomPlayer` uses a baked single mesh — preset part indices
+(head/upper/lower) don't change the mesh shape in-game. Fixed in Phase D.
+
+### 📋 Phase D: In-Game SidekickRuntime Visual Loader (Next)
+
+Replace baked `HumanCustomMesh` at runtime via `SidekickRuntime.CreateCharacter()`.
+Player spawns with the exact preset parts chosen in the character creator.
+
+**Full plan + code skeleton:** `CosmicWiki/guides/feature-007-phase-d-plan.md`
+
+**New files:**
+- `Assets/Scripts/Character/SyntyCharacterLoader.cs` — Awake() visual swap
+- Modify `Assets/Prefabs/HumanCustomPlayer.prefab` — add component
+
+### 🔮 Phase E: In-World Wardrobe (Future)
 
 1. Depends on Feature 005 (Nano-Fabricator building)
 2. Interact (E) → opens CharacterCreator in "edit mode"
-3. Edit mode: color/parts only — no name change
-4. Apply → update live player via `CharacterCustomizer` + `SyntyPartSwapper`
+3. Apply → hot-swap preset on live player via `SyntyCharacterLoader`
 
 ## Color System
 
@@ -94,18 +103,22 @@ Character_Color_Primary_G  (float)
 Character_Color_Primary_B  (float)
 ```
 
-## New Scripts
+## Scripts
 
-| Script | Path |
-|--------|------|
-| `CharacterCreatorUI.cs` | `Assets/Scripts/UI/CharacterCreatorUI.cs` |
-| `PlayerCharacterData.cs` | `Assets/Scripts/Character/PlayerCharacterData.cs` |
-| `CharacterCustomizer.cs` | `Assets/Scripts/Character/CharacterCustomizer.cs` |
+| Script | Path | Phase |
+|--------|------|-------|
+| `CharacterCustomizer.cs` | `Assets/Scripts/Character/CharacterCustomizer.cs` | A |
+| `PlayerCharacterData.cs` | `Assets/Scripts/Character/PlayerCharacterData.cs` | A/B/C |
+| `CharacterCreatorUI.cs` | `Assets/Scripts/UI/CharacterCreatorUI.cs` | A (legacy, superseded by B) |
+| `CharacterCreatorController.cs` | `Assets/Scripts/UI/CharacterCreatorController.cs` | B |
+| `PlayerNameDisplay.cs` | `Assets/Scripts/UI/PlayerNameDisplay.cs` | C |
+| `SyntyCharacterLoader.cs` | `Assets/Scripts/Character/SyntyCharacterLoader.cs` | D (planned) |
 
 ## Status
 
-- [x] Phase A: SidekickPlayer.prefab model swap
-- [ ] Phase B: animation retarget verification
-- [ ] Phase C: CharacterCreator scene + UI
-- [ ] Phase D: in-world wardrobe (depends on Feature 005)
-- [ ] All CharacterAbility regression tests pass
+- [x] Phase A: SidekickPlayer.prefab + CharacterCustomizer
+- [x] Phase A+: HumanCustomPlayer + animation retarget confirmed
+- [x] Phase B: CharacterCreator scene + SidekickRuntime part picker
+- [x] Phase C: Save/load wired to SandboxShowcase, name display in HUD
+- [ ] Phase D: SyntyCharacterLoader — runtime preset mesh swap in-game
+- [ ] Phase E: In-world wardrobe (depends on Feature 005)
