@@ -8,14 +8,14 @@ Last Updated: 2026-02-17
 
 ## Overview
 
-**Total Entries:** 7
+**Total Entries:** 8
 **Status:**
-- ✅ Complete: 7
+- ✅ Complete: 8
 - ⏳ In Progress: 0
 - ⚠️ Blocked: 0
 
 **Types:**
-- Feature Implementation: 6
+- Feature Implementation: 7
 - Bug Fix: 1
 - Refactor: 0
 - Documentation: 0
@@ -131,6 +131,30 @@ Last Updated: 2026-02-17
 
 ---
 
+### 2026-02-17 - Feature 002: Inventory & Item System
+**File:** [entries/2026-02-17-inventory-item-system.md](entries/2026-02-17-inventory-item-system.md)
+**Type:** Feature Implementation
+**Status:** ✅ Complete
+**Summary:** Built the full item type hierarchy (CosmicItem → Resource/Consumable/Tool/Furniture) on top of TDE's InventoryEngine. Created 6 item SO assets (EnergyCrystal, FerriteCore, AlienBerry, Stardust, PlasmaCutter, MineralExtractor) + ItemRegistry. Wired HumanCustomPlayer with 32-slot main inventory, 4-slot hotbar, and ToolController ability stub. Added PlayerInventoryCanvas to SandboxShowcase with HotbarUI (keys 1–4) and InventoryPanel (I key toggle). Migrated AlienBerryItem.cs → ConsumableItem.cs.
+
+**Key Achievements:**
+- `CosmicItemType` enum with 8 types — future-safe for Blueprint/Seed/Key
+- `ConsumableItem.Use()` — HealthRestore, StaminaRestore, SpeedBoost fields
+- `ToolController` CharacterAbility — EquipTool spawns placeholder cylinder prop
+- `ItemRegistry.asset` — `Get(id)` / `GetByType(type)` for crafting/shop systems
+- `HumanCustomPlayer.prefab` — Inventory×2 (32+4 slots) + CharacterInventory names + ToolController
+- `PlayerInventoryCanvas` (sortOrder=5) — HotbarPanel + InventoryPanel in SandboxShowcase
+- Picker prefabs fixed (broken GUID refs) + FerritePicker/StardustPicker created
+
+**Lessons:**
+- TDE event type is `MMInventoryEvent` (not `InventoryEvent`); `UseItem(item, index)` has no playerID param
+- `manage_scriptable_object` cannot set object references or array sizes — must edit .asset YAML directly
+- Inventory `Content` array must be pre-sized in prefab YAML (32 or 4 nulls) or it holds 0 items at runtime
+
+**Next Session:** Feature 005 (Building Placement), Feature 006 (Tool Actions), or Feature 003 (NPC/Shop)
+
+---
+
 ## By Type
 
 ### Feature Implementation
@@ -141,6 +165,7 @@ Last Updated: 2026-02-17
 4. **2026-02-17** - [ACNH Camera + 16×16 Island](entries/2026-02-17-acnh-camera-island.md) - ✅ Complete
 5. **2026-02-17** - [Synty Character Integration + HumanCustomPlayer](entries/2026-02-17-synty-character-integration.md) - ✅ Complete
 6. **2026-02-17** - [Feature 007 Phase E — Wardrobe/Mirror Interactable](entries/2026-02-17-wardrobe-interactable.md) - ✅ Complete
+7. **2026-02-17** - [Feature 002: Inventory & Item System](entries/2026-02-17-inventory-item-system.md) - ✅ Complete
 
 ### Bug Fix
 
@@ -194,9 +219,9 @@ Last Updated: 2026-02-17
 
 ### Planned (Next 3 Sessions)
 
-1. **Inventory System** - Item pickups, hotbar UI, basic crafting scaffold (features/002-inventory)
-2. **Grid Placement** - GridCursor hover highlight, click-to-place trees/rocks (features/001-world continuation)
-3. **NPC/AI Foundation** - Z.O.E. companion with TDE AIWalk brain + patrol path
+1. **Feature 005 — Building Placement** - FurnitureItem.Use() → PlacementController, grid snapping, ghost preview
+2. **Feature 006 — Tool Actions** - ToolController.HandleInput() → chop flora, mine rocks via IslandGridManager
+3. **Feature 003 — NPC/Shop System** - Z.O.E. companion + shopkeeper with ItemRegistry-driven trade UI
 
 ### Future (Next 10 Sessions)
 
