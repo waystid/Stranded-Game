@@ -70,8 +70,8 @@ After terrain paint:
 
 ## Status
 
-- [ ] GridCell.cs — data structure
-- [ ] GridCursor.cs — hover highlight
-- [ ] TerrainPainter.cs — paint system
-- [ ] FloraPlacement.cs — flora snapping
+- [x] GridCell.cs — data structure
+- [x] GridCursor.cs — hover highlight
+- [x] TerrainPainter.cs — paint system
+- [x] FloraPlacement.cs — flora snapping
 - [ ] NavMesh rebake integration
