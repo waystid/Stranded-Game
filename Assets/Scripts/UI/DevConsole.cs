@@ -45,10 +45,16 @@ public class DevConsole : MonoBehaviour
     string    _rebindTarget; // null = not listening
     Font      _font;
 
+    // ── Defaults (grid) ──────────────────────────────────────────────────────
+    const bool  DEF_GRID_SHOW     = false;
+    const float DEF_GRID_CELL     = 4f;
+    const float DEF_GRID_ALPHA    = 0.25f;
+
     // ── Scene references ─────────────────────────────────────────────────────
     CharacterMovement           _charMove;
     CinemachinePositionComposer _cinemachine;
     DayNightCycle               _dayNight;
+    GridOverlay                 _grid;
     List<Material>              _curvatureMaterials = new List<Material>();
 
     // ── UI refs ───────────────────────────────────────────────────────────────
@@ -56,6 +62,10 @@ public class DevConsole : MonoBehaviour
     Slider  _sliderWalk, _sliderZoom, _sliderDayDuration, _sliderTimeOfDay, _sliderCurvature;
     Text    _lblWalkVal, _lblZoomVal, _lblDayDurationVal, _lblTimeOfDayVal, _lblCurvatureVal;
     Toggle  _toggleDayNight;
+    Toggle  _toggleGrid;
+    Slider  _sliderGridCell;
+    Slider  _sliderGridAlpha;
+    Text    _lblGridCellVal, _lblGridAlphaVal;
     Button  _btnConsoleKey, _btnSprintKey, _btnInteractKey, _btnJumpKey;
     Text    _txtConsoleKey, _txtSprintKey, _txtInteractKey, _txtJumpKey;
 
@@ -109,12 +119,29 @@ public class DevConsole : MonoBehaviour
         if (_curvatureMaterials.Count > 0)
             _sliderCurvature.SetValueWithoutNotify(_curvatureMaterials[0].GetFloat("_Curvature"));
 
+        // Grid overlay — attach to the MainCamera (required by GridOverlay)
+        var mainCam = Camera.main;
+        if (mainCam != null)
+        {
+            _grid = mainCam.GetComponent<GridOverlay>();
+            if (_grid == null)
+                _grid = mainCam.gameObject.AddComponent<GridOverlay>();
+            _grid.enabled  = DEF_GRID_SHOW;
+            _grid.CellSize = DEF_GRID_CELL;
+            _grid.GridColor = new Color(1f, 1f, 1f, DEF_GRID_ALPHA);
+        }
+        _toggleGrid.SetIsOnWithoutNotify(DEF_GRID_SHOW);
+        _sliderGridCell.SetValueWithoutNotify(DEF_GRID_CELL);
+        _sliderGridAlpha.SetValueWithoutNotify(DEF_GRID_ALPHA);
+
         // Sync value labels
         _lblWalkVal.text        = _sliderWalk.value.ToString("F1");
         _lblZoomVal.text        = _sliderZoom.value.ToString("F1");
         _lblDayDurationVal.text = _sliderDayDuration.value.ToString("F0") + "s";
         _lblTimeOfDayVal.text   = _sliderTimeOfDay.value.ToString("F2");
         _lblCurvatureVal.text   = _sliderCurvature.value.ToString("F4");
+        _lblGridCellVal.text    = _sliderGridCell.value.ToString("F1");
+        _lblGridAlphaVal.text   = _sliderGridAlpha.value.ToString("F2");
 
         RefreshKeyLabels();
 
@@ -125,6 +152,9 @@ public class DevConsole : MonoBehaviour
         _sliderTimeOfDay.onValueChanged.AddListener(OnTimeOfDayChanged);
         _sliderCurvature.onValueChanged.AddListener(OnCurvatureChanged);
         _toggleDayNight.onValueChanged.AddListener(OnDayNightToggle);
+        _toggleGrid.onValueChanged.AddListener(OnGridToggle);
+        _sliderGridCell.onValueChanged.AddListener(OnGridCellChanged);
+        _sliderGridAlpha.onValueChanged.AddListener(OnGridAlphaChanged);
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -214,6 +244,28 @@ public class DevConsole : MonoBehaviour
             mat.SetFloat("_Curvature", v);
     }
 
+    void OnGridToggle(bool val)
+    {
+        if (_grid != null) _grid.enabled = val;
+    }
+
+    void OnGridCellChanged(float v)
+    {
+        _lblGridCellVal.text = v.ToString("F1");
+        if (_grid != null) _grid.CellSize = v;
+    }
+
+    void OnGridAlphaChanged(float v)
+    {
+        _lblGridAlphaVal.text = v.ToString("F2");
+        if (_grid != null)
+        {
+            var c = _grid.GridColor;
+            c.a = v;
+            _grid.GridColor = c;
+        }
+    }
+
     // ─────────────────────────────────────────────────────────────────────────
     //  KEY REBINDING
     // ─────────────────────────────────────────────────────────────────────────
@@ -284,6 +336,9 @@ public class DevConsole : MonoBehaviour
         _sliderTimeOfDay.value   = DEF_TIME_OF_DAY;
         _sliderCurvature.value   = DEF_CURVATURE;
         _toggleDayNight.isOn     = DEF_DAY_NIGHT;
+        _toggleGrid.isOn         = DEF_GRID_SHOW;
+        _sliderGridCell.value    = DEF_GRID_CELL;
+        _sliderGridAlpha.value   = DEF_GRID_ALPHA;
 
         _toggleKey   = DEF_KEY_CONSOLE;
         _sprintKey   = DEF_KEY_SPRINT;
@@ -458,6 +513,9 @@ public class DevConsole : MonoBehaviour
         // ─── WORLD ───────────────────────────────────────────────────────
         AddSectionHeader(contentGO, "── WORLD ──");
         (_sliderCurvature, _lblCurvatureVal) = AddSliderRow(contentGO, "Curvature", 0f, 0.008f, DEF_CURVATURE, "F4");
+        _toggleGrid = AddToggleRow(contentGO, "Show Grid", DEF_GRID_SHOW);
+        (_sliderGridCell,  _lblGridCellVal)  = AddSliderRow(contentGO, "Grid Cell Size", 1f, 16f, DEF_GRID_CELL,  "F1");
+        (_sliderGridAlpha, _lblGridAlphaVal) = AddSliderRow(contentGO, "Grid Alpha",     0f,  1f, DEF_GRID_ALPHA, "F2");
 
         // ─── KEY BINDINGS ─────────────────────────────────────────────────
         AddSectionHeader(contentGO, "── KEY BINDINGS ──");
