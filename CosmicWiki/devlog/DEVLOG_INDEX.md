@@ -8,9 +8,9 @@ Last Updated: 2026-02-16
 
 ## Overview
 
-**Total Entries:** 4
+**Total Entries:** 5
 **Status:**
-- ✅ Complete: 4
+- ✅ Complete: 5
 - ⏳ In Progress: 0
 - ⚠️ Blocked: 0
 
@@ -19,11 +19,31 @@ Last Updated: 2026-02-16
 - Bug Fix: 1
 - Refactor: 0
 - Documentation: 0
-- Milestone: 0
+- Milestone: 1
 
 ---
 
 ## Chronological Index
+
+### 2026-02-16 - Feature Branch Roadmap + GridCell Foundation
+**File:** [entries/2026-02-16-feature-branch-roadmap.md](entries/2026-02-16-feature-branch-roadmap.md)
+**Type:** Milestone
+**Status:** ✅ Complete
+**Summary:** Merged camera-controller branch to main. Created `feature-base` umbrella + 7 feature sub-branches. Wrote full wiki infrastructure (4 agent files, 7 guide stubs, 7 wiki pages). Implemented `GridCell.cs` (TerrainType enum, walkability) and `GridCursor.cs` (raycast highlight quad). Extended `IslandGridManager` with cell registry (GetCell/SetCell API).
+
+**Key Achievements:**
+- PR #2 merged: camera + console + grid system → main
+- Branch structure: `feature-base` + `features/001` through `features/007`
+- 4 agent files: synty-sidekick, pandazole, tde-ai, kevin-iglesias
+- `GridCell.cs` — TerrainType enum, IsWalkable, IsOccupied, occupant ref
+- `GridCursor.cs` — mouse raycast → cell hover highlight with walkable/blocked color
+- `IslandGridManager` — GetCell/SetCell/SetTerrainType + lazy cell dictionary
+
+**Lesson:** Git cannot have both a `features` branch and `features/NNN` sub-branch — ref namespace conflict. Umbrella must be named differently (use `feature-base`).
+
+**Next Session:** TerrainPainter.cs + FloraPlacement.cs on `features/001-world`
+
+---
 
 ### 2026-02-16 - Dev Console + Island Grid System
 **File:** [entries/2026-02-16-dev-console-island-grid.md](entries/2026-02-16-dev-console-island-grid.md)
@@ -116,7 +136,7 @@ Last Updated: 2026-02-16
 
 ### Milestone
 
-*(No entries yet)*
+1. **2026-02-16** - [Feature Branch Roadmap + GridCell Foundation](entries/2026-02-16-feature-branch-roadmap.md) - ✅ Complete
 
 ---
 
@@ -154,16 +174,16 @@ Last Updated: 2026-02-16
 
 ### Planned (Next 3 Sessions)
 
-1. **Grid Placement / Terraforming** - GridCursor raycast, cell hover highlight, terrain type painting (ground/cliff/water)
-2. **Tree Planting** - Place/remove trees at empty grid cells
-3. **Building Placement** - Multi-cell footprint support
+1. **TerrainPainter + FloraPlacement** (`features/001-world`) — paint terrain types onto cells, place Pandazole flora at grid cells
+2. **SidekickPlayer Phase A** (`features/007-character-creator`) — mesh swap from AstronautPlayer, TDE ability verification
+3. **CameraController state machine** (`features/003-camera-control`) — 3 modes + orbital snap Q/E
 
 ### Future (Next 10 Sessions)
 
-- Player abilities refinement
-- Environment zones
-- Collectible items (Plasma Eel)
-- NPC systems (Z.O.E. AI)
+- 002-items: inventory UI + TDE pickup system
+- 004-villagers: AIBrain patrol + dialogue panel
+- 005-buildings: BuildingPlacer with grid footprint
+- 006-tools: ToolController + Kevin Iglesias animator swap
 
 ---
 
