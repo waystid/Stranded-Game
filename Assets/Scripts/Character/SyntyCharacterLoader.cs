@@ -13,6 +13,13 @@ using UnityEngine;
 /// Runs in Awake() — before TDE's CharacterAnimator.Start() initialises — so the swap
 /// is invisible to TDE and all gameplay components work unchanged.
 ///
+/// Avatar: uses SK_BaseModel avatar (loaded from Resources prefab asset) which exactly
+/// matches the Synty skeleton bone names. Human-Custom-avatar bone names differ from
+/// the raw Synty rig and caused silent Rebind() failure (T-pose).
+///
+/// DestroyImmediate: old HumanCustomMesh must be destroyed immediately (not deferred)
+/// so Rebind() does not bind to the old skeleton bones before they disappear.
+///
 /// After Awake() returns:
 ///   CharacterCustomizer.Start()  → finds new SMRs → applies saved colors. ✅
 ///   CharacterAnimator.Start()    → finds Animator on SuitModel with rebound skeleton. ✅
@@ -52,6 +59,10 @@ public class SyntyCharacterLoader : MonoBehaviour
             return;
         }
 
+        // Load the SK_BaseModel avatar from the prefab asset — this exactly describes
+        // the Synty bone hierarchy and avoids the Human-Custom-avatar bone name mismatch.
+        var skBaseAvatar = baseModel.GetComponent<Animator>()?.avatar;
+
         _runtime    = new SidekickRuntime(baseModel, baseMat, null, _dbManager);
         SidekickRuntime.PopulateToolData(_runtime);
         _partLibrary = _runtime.MappedPartDictionary;
@@ -89,17 +100,12 @@ public class SyntyCharacterLoader : MonoBehaviour
         var animator = suitModel.GetComponent<Animator>();
 
         // ── Extract skeleton root + all SMRs before reparenting ──────────────
-        // NOTE: We intentionally keep the existing Human-Custom-avatar on SuitModel's
-        // Animator rather than swapping to the Synty avatar. Human-Custom was exported
-        // from the same Synty rig, so bone names are identical and Rebind() will find
-        // them in the new hierarchy. Swapping the avatar caused silent humanoid
-        // retargeting failure (T-pose) because the Synty avatar was bound to tempGO.
         var skeletonRoot = tempGO.transform.Find("root");
         var smrs = tempGO.GetComponentsInChildren<SkinnedMeshRenderer>(true);
 
-        // ── Remove old baked mesh ─────────────────────────────────────────────
+        // ── Remove old baked mesh (DestroyImmediate so it's gone before Rebind) ─
         var oldMesh = suitModel.Find("HumanCustomMesh");
-        if (oldMesh != null) Destroy(oldMesh.gameObject);
+        if (oldMesh != null) DestroyImmediate(oldMesh.gameObject);
 
         // ── Scale container (mirrors the old 0.6667 scale to keep net scale 1.0) ──
         var container = new GameObject("SidekickMesh");
@@ -113,11 +119,13 @@ public class SyntyCharacterLoader : MonoBehaviour
         foreach (var smr in smrs)
             smr.transform.SetParent(container.transform, false);
 
-        // ── Rebind Animator to new skeleton (same avatar, new bone transforms) ─
+        // ── Rebind Animator with SK_BaseModel avatar so bone names match Synty rig ─
         if (animator != null)
         {
+            if (skBaseAvatar != null) animator.avatar = skBaseAvatar;
             animator.Rebind();
             animator.Update(0f);
+            Debug.Log($"[SyntyCharacterLoader] Rebind complete. avatar={animator.avatar?.name}, isHuman={animator.isHuman}");
         }
 
         // ── Cleanup (tempGO is now empty — skeleton + SMRs were reparented out) ─

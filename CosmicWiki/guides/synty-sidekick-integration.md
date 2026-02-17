@@ -112,7 +112,7 @@ Character_Color_Primary_B  (float)
 | `CharacterCreatorUI.cs` | `Assets/Scripts/UI/CharacterCreatorUI.cs` | A (legacy, superseded by B) |
 | `CharacterCreatorController.cs` | `Assets/Scripts/UI/CharacterCreatorController.cs` | B |
 | `PlayerNameDisplay.cs` | `Assets/Scripts/UI/PlayerNameDisplay.cs` | C |
-| `SyntyCharacterLoader.cs` | `Assets/Scripts/Character/SyntyCharacterLoader.cs` | D (planned) |
+| `SyntyCharacterLoader.cs` | `Assets/Scripts/Character/SyntyCharacterLoader.cs` | D ✅ |
 
 ## Status
 
@@ -120,5 +120,10 @@ Character_Color_Primary_B  (float)
 - [x] Phase A+: HumanCustomPlayer + animation retarget confirmed
 - [x] Phase B: CharacterCreator scene + SidekickRuntime part picker
 - [x] Phase C: Save/load wired to SandboxShowcase, name display in HUD
-- [ ] Phase D: SyntyCharacterLoader — runtime preset mesh swap in-game
+- [x] Phase D: SyntyCharacterLoader — runtime preset mesh swap in-game ✅
 - [ ] Phase E: In-world wardrobe (depends on Feature 005)
+
+### Phase D — Avatar & Destroy pitfalls (recorded 2026-02-17)
+
+- **Use SK_BaseModel avatar, not Human-Custom-avatar** — `Human-Custom-avatar` bone names don't match the raw Synty `SK_BaseModel` skeleton; `Rebind()` silently produces T-pose. Load avatar from `Resources.Load<GameObject>("Meshes/SK_BaseModel").GetComponent<Animator>().avatar`.
+- **Use `DestroyImmediate` when removing the old mesh before `Rebind()`** — `Destroy()` is deferred to end-of-frame; the old skeleton interferes with `Rebind()` if still present.

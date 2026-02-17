@@ -272,7 +272,7 @@ public class SyntyCharacterLoader : MonoBehaviour
 |------|-----------|
 | SMR bone refs broken after reparenting | Skeleton + SMRs moved into same container — Transform refs remain valid |
 | Animator.Rebind() resets animation state | Runs in Awake() before TDE Start() — no state to reset |
-| ColonelAnimator expects specific bones | SK_BaseModel uses identical bone names as Human-Custom → safe |
+| ColonelAnimator expects specific bones | Use SK_BaseModel avatar (see Post-Implementation Notes) |
 | Scale mismatch (character too big/small) | Container at exactly 0.6667 mirrors old HumanCustomMesh scale |
 | No saved data / DB failure | Guard clauses return early → HumanCustomMesh stays as fallback |
 | SidekickRuntime too slow for Awake | DB load is synchronous SQLite — fast enough (< 1 frame) |
@@ -312,5 +312,39 @@ public class SyntyCharacterLoader : MonoBehaviour
 
 ---
 
+---
+
+## Post-Implementation Notes (Animation Fix)
+
+### T-pose bug — two root causes
+
+**Bug 1: Avatar bone name mismatch**
+
+The pre-session plan stated `Human-Custom-avatar` and `SK_BaseModel` share identical bone names. This was **incorrect**. In practice, `Rebind()` with `Human-Custom-avatar` produced a silent T-pose because the avatar's bone mapping did not match the raw Synty `SK_BaseModel` skeleton names.
+
+**Fix:** Load the SK_BaseModel avatar directly from the prefab asset:
+```csharp
+var skBaseAvatar = baseModel.GetComponent<Animator>()?.avatar;
+// ...
+if (skBaseAvatar != null) animator.avatar = skBaseAvatar;
+animator.Rebind();
+```
+The SK_BaseModel prefab asset's avatar exactly describes the Synty bone hierarchy. The avatar is a `ScriptableObject` (asset reference), so it survives `Destroy(tempGO)` safely.
+
+**Bug 2: Deferred `Destroy()`**
+
+`Destroy(oldMesh.gameObject)` is deferred to end-of-frame in Unity. During `Rebind()`, the old `HumanCustomMesh` skeleton was still present, causing a binding conflict.
+
+**Fix:** Use `DestroyImmediate(oldMesh.gameObject)` so the old skeleton is gone before `Rebind()` runs.
+
+### Diagnostic log after fix
+```
+[SyntyCharacterLoader] Rebind complete. avatar=SK_BaseModelAvatar, isHuman=True
+[SyntyCharacterLoader] Visual swap complete.
+```
+
+---
+
 **Plan created:** 2026-02-17
+**Animation fix:** 2026-02-17
 **Complexity:** Medium (research done, algorithm clear, 1 new script + 1 prefab change)
