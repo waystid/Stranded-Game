@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86ba79e348ba64f3b98b9a294de9da9d, type: 3}
+  m_Name: StarterShopInventory
+  m_EditorClassIdentifier: Assembly-CSharp::ShopInventory
+  Stock:
+  - Item: {fileID: 11400000, guid: 5ac691c3874e840cc92ed4b5f6540958, type: 2}
+    StardustBuyPrice: 50
+    StardustSellPrice: 20
+  - Item: {fileID: 11400000, guid: 909063b13bb884c529788b54aa1ffda5, type: 2}
+    StardustBuyPrice: 40
+    StardustSellPrice: 15
+  - Item: {fileID: 11400000, guid: 13e1ed25792934b029a15becd50f0b23, type: 2}
+    StardustBuyPrice: 30
+    StardustSellPrice: 10
+  - Item: {fileID: 11400000, guid: b9c36bda8dffe48a792a8e4cb04c7d96, type: 2}
+    StardustBuyPrice: 200
+    StardustSellPrice: 0
+  - Item: {fileID: 11400000, guid: f74253f2788b047779b91852c8c0f5ce, type: 2}
+    StardustBuyPrice: 180
+    StardustSellPrice: 0
