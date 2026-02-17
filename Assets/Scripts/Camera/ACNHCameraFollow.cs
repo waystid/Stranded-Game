@@ -1,9 +1,12 @@
 using UnityEngine;
+using MoreMountains.TopDownEngine;
 
 /// <summary>
 /// Animal Crossing: New Horizons-style fixed isometric follow camera.
 /// Fixed 45-degree diagonal yaw, ~38-degree pitch downward. Smooth follows player.
 /// Disable CharacterRotateCamera on the player when using this.
+/// Enable RotateInputBasedOnCameraDirection on the InputManager; this camera
+/// automatically registers itself so WASD maps to camera-relative directions.
 /// </summary>
 public class ACNHCameraFollow : MonoBehaviour
 {
@@ -62,6 +65,12 @@ public class ACNHCameraFollow : MonoBehaviour
             transform.position = Target.position + Offset;
 
         ApplyFixedRotation();
+
+        // Register with the TDE InputManager so RotateInputBasedOnCameraDirection
+        // uses this camera's fixed YawAngle for camera-relative WASD movement.
+        var inputManager = FindFirstObjectByType<InputManager>();
+        if (inputManager != null)
+            inputManager.SetCamera(_cam, true);
     }
 
     void LateUpdate()
