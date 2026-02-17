@@ -2,20 +2,20 @@
 
 > **📚 Complete chronological index of all development sessions**
 
-Last Updated: 2026-02-17
+Last Updated: 2026-02-16
 
 ---
 
 ## Overview
 
-**Total Entries:** 3
+**Total Entries:** 4
 **Status:**
-- ✅ Complete: 3
+- ✅ Complete: 4
 - ⏳ In Progress: 0
 - ⚠️ Blocked: 0
 
 **Types:**
-- Feature Implementation: 2
+- Feature Implementation: 3
 - Bug Fix: 1
 - Refactor: 0
 - Documentation: 0
@@ -24,6 +24,25 @@ Last Updated: 2026-02-17
 ---
 
 ## Chronological Index
+
+### 2026-02-16 - Dev Console + Island Grid System
+**File:** [entries/2026-02-16-dev-console-island-grid.md](entries/2026-02-16-dev-console-island-grid.md)
+**Type:** Feature Implementation
+**Status:** ✅ Complete
+**Summary:** Built programmatic in-game dev console (dark nav panel, toggleable by backtick), fixed blank panel (3 root causes), added toggleable 3D grid overlay, and implemented the 64×64 island grid coordinate system with Island GO rotated 45° for ACNH-style alignment. Trees/rocks repositioned to integer grid cells with 1×1 BoxColliders.
+
+**Key Achievements:**
+- `DevConsole.cs` — sliders for WalkSpeed, CameraZoom, DayNight, Curvature + key rebinding
+- Blank panel fixed: VerticalLayoutGroup childControlHeight, Mask viewport alpha, ForceRebuildLayout
+- `GridOverlay.cs` — GL.Lines grid aligned to island via GL.MultMatrix(IslandRoot)
+- `IslandGridManager.cs` — 64×64 grid singleton, WorldToCell/CellToWorld API
+- Island GO at Y=45°, all objects parented with integer local grid positions
+
+**Lesson:** `manage_gameobject modify position` sets **local** position for children; `Color.clear` on a Mask viewport clips all content; always check for TDE type name conflicts before naming custom classes.
+
+**Next Session:** Grid Placement / Terraforming Foundation
+
+---
 
 ### 2026-02-16 - Player Model Replacement
 **File:** [entries/2026-02-16-player-model-replacement.md](entries/2026-02-16-player-model-replacement.md)
@@ -79,8 +98,9 @@ Last Updated: 2026-02-17
 
 ### Feature Implementation
 
-1. **2026-02-16** - [Player Model Replacement](entries/2026-02-16-player-model-replacement.md) - ✅ Complete
-2. **2026-02-17** - [ACNH Camera + 16×16 Island](entries/2026-02-17-acnh-camera-island.md) - ✅ Complete
+1. **2026-02-16** - [Dev Console + Island Grid System](entries/2026-02-16-dev-console-island-grid.md) - ✅ Complete
+2. **2026-02-16** - [Player Model Replacement](entries/2026-02-16-player-model-replacement.md) - ✅ Complete
+3. **2026-02-17** - [ACNH Camera + 16×16 Island](entries/2026-02-17-acnh-camera-island.md) - ✅ Complete
 
 ### Bug Fix
 
@@ -134,9 +154,9 @@ Last Updated: 2026-02-17
 
 ### Planned (Next 3 Sessions)
 
-1. **Curved World Shader + Skybox + Day/Night Cycle** - ACNH visual polish: vertex curvature shader, FarlandSkies skybox, animated directional light
-2. **Interactive Objects** - Tree shaking, item collection
-3. **Inventory System** - Basic inventory UI
+1. **Grid Placement / Terraforming** - GridCursor raycast, cell hover highlight, terrain type painting (ground/cliff/water)
+2. **Tree Planting** - Place/remove trees at empty grid cells
+3. **Building Placement** - Multi-cell footprint support
 
 ### Future (Next 10 Sessions)
 
@@ -159,11 +179,11 @@ Last Updated: 2026-02-17
 
 ## Statistics
 
-**Total Development Time:** ~6 hours
-**Average Session Duration:** ~2 hours
-**Features Completed:** 3
-**Blockers Resolved:** 8
-**Documentation Created:** 1500+ lines
+**Total Development Time:** ~10 hours
+**Average Session Duration:** ~2.5 hours
+**Features Completed:** 8
+**Blockers Resolved:** 12
+**Documentation Created:** 2000+ lines
 
 ---
 

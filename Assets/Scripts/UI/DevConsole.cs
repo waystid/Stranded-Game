@@ -47,7 +47,7 @@ public class DevConsole : MonoBehaviour
 
     // ── Defaults (grid) ──────────────────────────────────────────────────────
     const bool  DEF_GRID_SHOW     = false;
-    const float DEF_GRID_CELL     = 4f;
+    const float DEF_GRID_CELL     = 1f;
     const float DEF_GRID_ALPHA    = 0.25f;
 
     // ── Scene references ─────────────────────────────────────────────────────
@@ -55,6 +55,7 @@ public class DevConsole : MonoBehaviour
     CinemachinePositionComposer _cinemachine;
     DayNightCycle               _dayNight;
     GridOverlay                 _grid;
+    IslandGridManager           _gridManager;
     List<Material>              _curvatureMaterials = new List<Material>();
 
     // ── UI refs ───────────────────────────────────────────────────────────────
@@ -130,6 +131,11 @@ public class DevConsole : MonoBehaviour
             _grid.CellSize = DEF_GRID_CELL;
             _grid.GridColor = new Color(1f, 1f, 1f, DEF_GRID_ALPHA);
         }
+
+        // Wire island root so the grid aligns with the 45°-rotated island
+        _gridManager = FindObjectOfType<IslandGridManager>();
+        if (_gridManager != null && _grid != null)
+            _grid.IslandRoot = _gridManager.IslandRoot;
         _toggleGrid.SetIsOnWithoutNotify(DEF_GRID_SHOW);
         _sliderGridCell.SetValueWithoutNotify(DEF_GRID_CELL);
         _sliderGridAlpha.SetValueWithoutNotify(DEF_GRID_ALPHA);

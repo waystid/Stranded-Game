@@ -189,12 +189,12 @@ namespace GalacticCrossing.Editor
         private static void ValidateSceneObjects(ValidationReport report)
         {
             // Check for GridManager
-            var gridManager = Object.FindFirstObjectByType<GridManager>();
+            var gridManager = Object.FindFirstObjectByType<IslandGridManager>();
             if (gridManager != null)
             {
                 report.AddSceneResult(true, "GridManager exists in scene");
 
-                if (gridManager.GridOrigin != null)
+                if (gridManager.IslandRoot != null)
                 {
                     report.AddSceneResult(true, "GridManager has GridOrigin configured");
                 }

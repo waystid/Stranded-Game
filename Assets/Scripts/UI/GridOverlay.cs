@@ -13,6 +13,10 @@ public class GridOverlay : MonoBehaviour
     public float CellSize   = 4f;    // size of each grid square in world units
     public float YOffset    = 0.05f; // height above ground plane
 
+    [Header("Island Alignment")]
+    [Tooltip("When set, the grid is drawn in this transform's local space (set to the Island root rotated 45°).")]
+    public Transform IslandRoot;
+
     [Header("Appearance")]
     public Color GridColor     = new Color(1f, 1f, 1f, 0.25f);
     public Color AxisColor     = new Color(0.4f, 0.8f, 1f, 0.6f); // cyan for center axes
@@ -46,6 +50,10 @@ public class GridOverlay : MonoBehaviour
 
         _mat.SetPass(0);
         GL.PushMatrix();
+
+        // Draw in Island local space so the grid aligns with the rotated island
+        if (IslandRoot != null)
+            GL.MultMatrix(IslandRoot.localToWorldMatrix);
 
         float half  = WorldSize * 0.5f;
         int   cells = Mathf.Max(1, Mathf.RoundToInt(WorldSize / CellSize));
