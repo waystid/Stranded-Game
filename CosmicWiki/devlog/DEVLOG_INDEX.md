@@ -2,20 +2,20 @@
 
 > **📚 Complete chronological index of all development sessions**
 
-Last Updated: 2026-02-16
+Last Updated: 2026-02-17
 
 ---
 
 ## Overview
 
-**Total Entries:** 4
+**Total Entries:** 6
 **Status:**
-- ✅ Complete: 4
+- ✅ Complete: 6
 - ⏳ In Progress: 0
 - ⚠️ Blocked: 0
 
 **Types:**
-- Feature Implementation: 3
+- Feature Implementation: 5
 - Bug Fix: 1
 - Refactor: 0
 - Documentation: 0
@@ -94,13 +94,33 @@ Last Updated: 2026-02-16
 
 ---
 
+### 2026-02-17 - Synty Character Integration + HumanCustomPlayer
+**File:** [entries/2026-02-17-synty-character-integration.md](entries/2026-02-17-synty-character-integration.md)
+**Type:** Feature Implementation
+**Status:** ✅ Complete
+**Summary:** Verified Synty Sidekick exported characters retarget TDE animations via Humanoid avatar (zero config). Built `HumanCustomPlayer.prefab` — swapped AstronautPlayer in SandboxShowcase with an exported Synty character. Fixed `avatarRoot` binding bug caused by disabled skeleton GO.
+
+**Key Achievements:**
+- Synty Sidekick export pipeline confirmed working (isHuman: true, hasBoundPlayables: true)
+- `HumanCustomPlayer.prefab` — SidekickPlayer TDE stack + Human-Custom mesh
+- SandboxShowcase LevelManager updated to spawn HumanCustomPlayer
+- Animations working: avatarRoot correctly bound to HumanCustomMesh
+
+**Lesson:** Unity finds disabled skeleton GOs during avatarRoot discovery — always DELETE old skeletons, never just `setActive(false)`.
+
+**Next Session:** Feature 007 Phase B — In-game Synty part picker
+
+---
+
 ## By Type
 
 ### Feature Implementation
 
 1. **2026-02-16** - [Dev Console + Island Grid System](entries/2026-02-16-dev-console-island-grid.md) - ✅ Complete
 2. **2026-02-16** - [Player Model Replacement](entries/2026-02-16-player-model-replacement.md) - ✅ Complete
-3. **2026-02-17** - [ACNH Camera + 16×16 Island](entries/2026-02-17-acnh-camera-island.md) - ✅ Complete
+3. **2026-02-16** - [Curved World + Skybox + Day/Night](entries/2026-02-16-curved-world-skybox-daynight.md) - ✅ Complete
+4. **2026-02-17** - [ACNH Camera + 16×16 Island](entries/2026-02-17-acnh-camera-island.md) - ✅ Complete
+5. **2026-02-17** - [Synty Character Integration + HumanCustomPlayer](entries/2026-02-17-synty-character-integration.md) - ✅ Complete
 
 ### Bug Fix
 
