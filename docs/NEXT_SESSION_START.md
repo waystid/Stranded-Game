@@ -1,398 +1,160 @@
-# Next Session: Camera Controller Implementation
+# Next Session: Fix Character Movement
 
-**Date:** 2026-02-17 (or next session)
-**Branch:** sandbox
-**Previous Session:** Player Model Replacement (Complete ✅)
-
----
-
-## Quick Start Commands
-
-### For You (User)
-
-**Start the session by saying:**
-```
-"Load devlog agent and start camera controller session"
-```
-
-Or more explicitly:
-```
-"Read the latest devlog entry, summarize what we did last time, and let's start working on the camera controller"
-```
-
-### What Will Happen
-
-Claude Code will:
-1. **Load DevLog Agent** - Specialized agent for reading development context
-2. **Read Latest Entry** - `CosmicWiki/devlog/entries/2026-02-16-player-model-replacement.md`
-3. **Summarize Previous Work:**
-   - Astronaut character model replaced successfully
-   - All TopDown Engine components working
-   - Animations playing correctly
-   - No blockers
-4. **Load Next Steps:**
-   - Camera controller implementation planned
-   - Study CharacterRotateCamera component
-   - Adjust camera behavior for Astronaut
-5. **Begin Implementation** - Ready to start camera work
+**Date:** Next session after 2026-02-17 (Movement Debug Sprint)
+**Branch:** `features/003-npc-shop`
+**Previous Session:** Two attempts at movement fix — InputManager added, camera-relative input wired, spawn moved to center. Character still not moving.
 
 ---
 
-## What We're Building Next
+## Current State
 
-### Objective: Camera Controller
-
-**Goal:** Implement custom camera behavior for the Astronaut character
-
-**Why:**
-- Default camera settings may not be optimal for Astronaut model
-- Need to adjust distance, rotation speed, follow smoothness
-- Test camera with character movement
-- Establish camera configuration pattern for future use
-
-**Success Criteria:**
-- [ ] Camera follows Astronaut smoothly
-- [ ] Camera distance feels right for gameplay
-- [ ] Rotation is responsive but not too sensitive
-- [ ] Camera works well during all movement (walk, run, jump, dash)
-- [ ] Configuration documented in devlog
-
----
-
-## Context You'll Have
-
-### What's Already Working
-
-**Player Character:**
-- Astronaut model fully functional
-- Prefab: `Assets/Prefabs/AstronautPlayer.prefab`
-- All 19 TopDown Engine components configured
-- Spawns via LevelManager in SandboxShowcase scene
-- Movement, jumping, dashing all work
-
-**Documentation:**
-- TopDown Engine integration in `CosmicWiki/topdown_engine/`
-- Helper scripts: `scripts/helpers/topdown_engine.sh`
-- DevLog system: `CosmicWiki/devlog/`
-
-**Current Status:**
-- Branch: sandbox (pushed to remote)
-- Scene: Assets/Scenes/SandboxShowcase.unity
-- No blockers
-
-### What Needs Work
-
-**Camera System:**
-- Current camera uses default CharacterRotateCamera settings
-- May need adjustment for Astronaut model scale (0.67x)
-- Distance, rotation speed, smoothness not yet tuned
-- No documentation of camera configuration yet
-
----
-
-## Agentic Approach
-
-### DevLog Agent Will:
-
-1. **Read Context** (automatic)
-   - Last session summary
-   - Current player setup
-   - Camera component status
-
-2. **Provide Guidance**
-   - TopDown Engine camera component docs
-   - Camera configuration patterns
-   - Testing workflow
-
-3. **Document As We Go**
-   - Camera settings tried
-   - What worked/didn't work
-   - Final configuration
-
-4. **Write Session Entry** (at end)
-   - Complete devlog for camera implementation
-   - Update master index
-   - Define next steps
-
-### Feature Implementation Pattern
-
-**Phase 1: Research**
-- Read CharacterRotateCamera component
-- Check current camera setup in scene
-- Find camera in hierarchy
-
-**Phase 2: Configure**
-- Adjust camera distance
-- Tune rotation speed
-- Set follow smoothness
-- Test each change
-
-**Phase 3: Test**
-- Test with WASD movement
-- Test with running
-- Test with jumping/dashing
-- Verify feels good
-
-**Phase 4: Document**
-- Record final settings
-- Document configuration pattern
-- Add to TopDown Engine workflows
-- Write devlog entry
-
----
-
-## Reference Materials
-
-### Documentation to Reference
-
-**TopDown Engine:**
-- API: https://topdown-engine-docs.moremountains.com/API/class_more_mountains_1_1_top_down_engine_1_1_character_rotate_camera.html
-- Local: `CosmicWiki/topdown_engine/README.md`
-
-**DevLog:**
-- Previous entry: `CosmicWiki/devlog/entries/2026-02-16-player-model-replacement.md`
-- Agent guide: `CosmicWiki/devlog/devlog-agent.md`
-- Template: `CosmicWiki/devlog/templates/devlog-entry-template.md`
-
-### Helper Commands
-
-**Load Helpers:**
-```bash
-source scripts/helpers/topdown_engine.sh
 ```
-
-**Get API Docs:**
-```bash
-topdown_api CharacterRotateCamera
-```
-
-**Verify Character:**
-```bash
-topdown_verify_character
+✅ InputManager in scene (Player1, Desktop, RotateInputBasedOnCameraDirection=true)
+✅ LinkedInputManager confirmed set in play mode (no null)
+✅ No runtime errors on Play
+✅ Spawn moved to world (20,2,0) = island center area
+✅ CliffTiles rendering green tops + brown sides
+✅ WaterPlane surrounding island
+❌ Character cannot move (WASD unresponsive)
+❌ TWC tile colliders are DISABLED (colliderType=0) — character falls into cliff geometry
 ```
 
 ---
 
-## Expected Session Flow
+## Root Cause Analysis (Most Likely Culprits, in Order)
 
-### 1. Start (5 minutes)
+### #1 — TWC `colliderType: 0` (Highest Confidence)
+
+`Assets/Data/IslandConfiguration.asset` line 38: `colliderType: 0`
+
+In TileWorldCreator v4, `colliderType: 0 = None`. This means the generated cliff tiles have **no physics colliders**. The character falls through all tile geometry and lands on the flat `GroundCollider` (120×120 BoxCollider at world Y=0, layer=Ground). The character is then visually buried inside cliff meshes that sit above Y=0. Movement may be working but invisible because the character is inside geometry.
+
+**Fix:** Change `colliderType` to `1` (Box) in IslandConfiguration, then adjust spawn Y so the character lands on the cliff tile tops.
+
+How to find the correct value: open the CliffIsland demo config and check what colliderType it uses:
 ```
-User: "Load devlog agent and start camera controller session"
-
-Claude: [Loads devlog agent, reads previous entry, summarizes]
-"Last session we completed player model replacement. Astronaut character
-is fully functional with all components. Next up: camera controller.
-Ready to begin!"
+Assets/TileWorldCreator/_Samples/CliffIsland URP/CliffIslandConfiguration.asset
 ```
 
-### 2. Research (15 minutes)
-- Read current camera setup
-- Find camera in SandboxShowcase scene
-- Check CharacterRotateCamera component properties
-- Review TopDown Engine camera documentation
+### #2 — Game View Focus (Simple but Often Missed)
 
-### 3. Implementation (30 minutes)
-- Adjust camera distance (start with 10 units, test)
-- Tune rotation speed (try 5.0, adjust)
-- Set follow smoothness (test values)
-- Test in play mode after each change
+Unity Editor does NOT forward keyboard input to the game unless the **Game View window is focused**. After clicking Play, the user must click inside the Game View panel before WASD registers.
 
-### 4. Testing (15 minutes)
-- WASD movement test
-- Running test
-- Jump/dash test
-- Camera rotation test
-- Overall feel check
+**Test:** Press Play → click once inside the Game View → then try WASD.
 
-### 5. Documentation (10 minutes)
-- Record final camera settings
-- Document configuration pattern
-- Create workflow if needed
-- Write devlog entry
+### #3 — SetCamera() / RotateInputBasedOnCameraDirection Not Effective
 
-**Total:** ~1.5 hours
+`ACNHCameraFollow.Start()` was updated to call `inputManager.SetCamera(_cam, true)`, which sets `_targetCamera` on the InputManager. TDE's `ApplyCameraRotation()` then reads `_targetCamera.transform.localEulerAngles.y` = 45° and rotates input.
+
+**Potential failure mode:** `FindFirstObjectByType<InputManager>()` in `ACNHCameraFollow.Start()` might return null if InputManager hasn't been instantiated yet (unlikely but possible due to Script Execution Order).
+
+**Verify in play mode:** Read InputManager component → check `_targetCamera` field is not null.
+
+If null: change `ACNHCameraFollow` to use `LateStart()` (coroutine with `yield return null`) or add a retry in `LateUpdate()` (similar to how Target is retried).
+
+### #4 — CharacterOrientation3D Mouse Aim (RotationMode 3)
+
+`HumanCustomPlayer.prefab`: `CharacterOrientation3D.RotationMode = 3` (LookAtMouseOrController). This performs a raycast from mouse position to find the character's facing direction. If the raycast uses a wrong layer mask and misses, the orientation ability may throw a silent exception that interrupts `ProcessAbility()` chain.
+
+**Check:** Look at `CharacterOrientation3D` source → what happens when `LookAtMouseOrController` raycast fails?
+
+**Quick fix if this is the issue:** Change RotationMode to `1` (RotateToFaceMovementDirection) which doesn't need a raycast.
+
+### #5 — Spawn Height After Collider Fix
+
+Once `colliderType` is fixed and tile colliders exist, spawn at world Y=2 will cause the character to fall. Cliff tile tops will be at some positive Y (likely Y=0.5 or Y=1). Need to confirm the cliff tile mesh height and set spawn Y = tile_top + 0.5.
 
 ---
 
-## Key Files to Work With
+## Action Plan
 
-### Unity Assets
-- **Scene:** `Assets/Scenes/SandboxShowcase.unity`
-- **Player Prefab:** `Assets/Prefabs/AstronautPlayer.prefab`
-- **Camera:** Find in scene hierarchy (likely "3DCameras" or similar)
+### Step 0: Game View Focus Test (2 minutes)
+1. Press Play
+2. Click inside Game View window
+3. Press WASD
+→ If movement works: the issue was just focus. Skip to Step 3.
 
-### Documentation to Update
-- **DevLog Entry:** Create `CosmicWiki/devlog/entries/2026-02-17-camera-controller.md`
-- **DevLog Index:** Update `CosmicWiki/devlog/DEVLOG_INDEX.md`
-- **Possible Workflow:** `CosmicWiki/topdown_engine/workflows/camera-setup.md` (if needed)
+### Step 1: Enable TWC Tile Colliders
+
+Check the CliffIsland demo for the correct colliderType value:
+```
+grep -n "colliderType" "Assets/TileWorldCreator/_Samples/CliffIsland URP/CliffIslandConfiguration.asset"
+```
+
+Edit `Assets/Data/IslandConfiguration.asset` line 38:
+```yaml
+colliderType: 0   # → change to 1 (Box) or 2 (Mesh)
+```
+
+Also check `tileColliderHeight` and `tileColliderExtrusionHeight` — may need non-zero values.
+
+### Step 2: Adjust Spawn Y for Tile Surface
+
+After enabling colliders, enter play mode and check where the character lands. Read the spawned character's world Y position via MCP. Set spawn Y = character_landed_Y + 0.1.
+
+As a starting point: spawn at world (20, 3, 0) — generous height, character drops onto tiles.
+
+### Step 3: Verify Camera-Relative Input
+
+Enter play mode and read InputManager component. Check:
+- `RotateInputBasedOnCameraDirection: true` ✓ (already saved)
+- `_targetCamera`: should be the Main Camera
+
+If `_targetCamera` is null, change ACNHCameraFollow to call SetCamera in a coroutine:
+```csharp
+IEnumerator RegisterCameraDelayed() {
+    yield return null;  // wait one frame for InputManager.Awake()
+    var im = FindFirstObjectByType<InputManager>();
+    if (im != null) im.SetCamera(_cam, true);
+}
+// call from Start()
+StartCoroutine(RegisterCameraDelayed());
+```
+
+### Step 4: Fix CharacterOrientation3D if Needed
+
+If movement still doesn't work after Steps 1-3, check `CharacterOrientation3D`:
+1. Enter play mode → check console for any silent exceptions
+2. In `HumanCustomPlayer.prefab`, change `RotationMode` from `3` to `1` (RotateToFaceMovementDirection)
+3. Re-test movement
+
+### Step 5: Fallback — Test with TDE Demo Character
+
+If HumanCustomPlayer still won't move, add `LoftSuspenders.prefab` from `Assets/TopDownEngine/Demos/Loft3D/Prefabs/PlayableCharacters/` to the scene and see if it responds to WASD. If it moves, compare its Character/InputManager configuration to HumanCustomPlayer.
 
 ---
 
-## Success Criteria Checklist
+## File Checklist for This Fix
 
-After this session, we should have:
-
-**Functional:**
-- [ ] Camera follows Astronaut smoothly
-- [ ] Camera distance appropriate for gameplay
-- [ ] Rotation speed feels responsive
-- [ ] Works well during all movement types
-- [ ] No jitter or camera bugs
-
-**Documented:**
-- [ ] DevLog entry written for camera controller
-- [ ] Camera configuration values recorded
-- [ ] Configuration pattern documented
-- [ ] DevLog index updated
-- [ ] Next steps defined
-
-**Code Quality:**
-- [ ] No console errors
-- [ ] Clean git status
-- [ ] Changes committed and pushed
+| File | Change |
+|------|--------|
+| `Assets/Data/IslandConfiguration.asset` | `colliderType: 0` → `1` (enable tile physics) |
+| `Assets/Scenes/SandboxShowcase.unity` | Adjust InitialSpawnPoint Y after tile collider test |
+| `Assets/Scripts/Camera/ACNHCameraFollow.cs` | If SetCamera() not registering: add coroutine delay |
+| `Assets/Prefabs/HumanCustomPlayer.prefab` | If Step 4 needed: CharacterOrientation3D.RotationMode 3→1 |
 
 ---
 
-## Potential Blockers
+## Start Command
 
-### Camera Component Not Found
-**Solution:** Search for camera in scene hierarchy, likely under "3DCameras" or "Main Camera"
-
-### Camera Doesn't Follow Player
-**Solution:** Verify CharacterRotateCamera.Target points to player
-Check LevelManager spawning updated camera target
-
-### Camera Settings Don't Take Effect
-**Solution:** Exit and re-enter play mode
-Save scene after changes
-
-### Camera Feels Wrong
-**Solution:** Try reference values from other TopDown Engine demos
-Test multiple distance values (8, 10, 12, 15 units)
-Adjust rotation speed in increments of 1.0
-
----
-
-## What Success Looks Like
-
-At the end of this session:
-
-**You'll have:**
-1. ✅ Working camera controller configured for Astronaut
-2. ✅ Complete devlog entry documenting camera implementation
-3. ✅ Camera configuration pattern for future use
-4. ✅ All changes committed and pushed
-5. ✅ Clear next steps for inventory system
-
-**You'll know:**
-- How to configure TopDown Engine cameras
-- What camera values work for your character
-- How to test camera behavior
-- The pattern for camera setup
-
-**Ready for:**
-- Next session: Interactive Objects or Inventory System
-- Continued agentic development workflow
-- Building more game systems
-
----
-
-## Tips for Agentic Development
-
-### Let the DevLog Agent Help
-
-**Start Session:**
 ```
-"Load devlog agent and summarize last session"
-```
-
-**During Work:**
-```
-"Note for devlog: Camera distance of 10 works best"
-"Document this blocker: Camera jitter when running"
-```
-
-**End Session:**
-```
-"Write devlog entry for camera controller implementation"
-```
-
-### Use Helper Scripts
-
-```bash
-# Load TopDown Engine helpers
-source scripts/helpers/topdown_engine.sh
-
-# Get component API docs
-topdown_api CharacterRotateCamera
-
-# Verify character setup
-topdown_verify_character
-```
-
-### Follow the Pattern
-
-1. **Read context** - Understand what's working
-2. **Research** - Learn the component/system
-3. **Implement** - Make changes incrementally
-4. **Test** - Verify after each change
-5. **Document** - Record what worked
-
----
-
-## Emergency Recovery
-
-### If Something Breaks
-
-**Camera stops working:**
-```bash
-# Check git status
-git status
-
-# See what changed
-git diff
-
-# Restore if needed
-git checkout -- [file]
-```
-
-**Can't find previous work:**
-```bash
-# Read latest devlog
-cat CosmicWiki/devlog/entries/$(ls -t CosmicWiki/devlog/entries/ | head -1)
-
-# Check git history
-git log --oneline -5
-```
-
-**Lost context:**
-```bash
-# Load devlog agent and ask
-"Load devlog agent and tell me what we've implemented so far"
+"Read NEXT_SESSION_START.md. Fix character movement:
+Step 0 = confirm Game View focus.
+Step 1 = enable TWC tile colliders (colliderType in IslandConfiguration.asset).
+Step 2 = adjust spawn Y.
+Step 3 = verify SetCamera is registered.
+Step 4 = if still broken, change RotationMode 3→1 on CharacterOrientation3D."
 ```
 
 ---
 
-## Final Checklist
+## Reference
 
-Before starting the camera controller session, verify:
-
-- [x] Git status clean (pushed to sandbox)
-- [x] Unity project in good state
-- [x] Astronaut character working
-- [x] SandboxShowcase scene loaded
-- [x] DevLog system set up
-- [x] Helper scripts available
-- [x] You understand the objective
-
-**Ready to start?**
-
-Say: **"Load devlog agent and start camera controller session"**
-
-🚀 **Let's build!**
-
----
-
-**Guide Created:** 2026-02-16
-**Next Session:** Camera Controller Implementation
-**Status:** Ready to Begin
+- **IslandConfiguration:** `Assets/Data/IslandConfiguration.asset`
+- **CliffIsland demo config:** `Assets/TileWorldCreator/_Samples/CliffIsland URP/CliffIslandConfiguration.asset`
+- **HumanCustomPlayer:** `Assets/Prefabs/HumanCustomPlayer.prefab`
+- **ACNHCameraFollow:** `Assets/Scripts/Camera/ACNHCameraFollow.cs`
+- **InputManager (scene):** Managers group → InputManager GO → MoreMountains.TopDownEngine.InputManager
+- **CharacterMovement source:** `Assets/TopDownEngine/Common/Scripts/Characters/CharacterAbilities/CharacterMovement.cs`
+- **Spawn world coords:** (20, 2-3, 0) = TWC local ~(14,14)
+- **Managers group world pos:** (-7.5, 1.5, 9.5) — needed to calculate local spawn offsets
