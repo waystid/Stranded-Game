@@ -137,4 +137,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/TopDownEngine/ThirdParty/MoreMountains/MMTools/Demos/MMSceneLoading/MMSceneLoadingDemoSceneB.unity
     guid: 352d34cac2435634fb99618d19a3929c
+  - enabled: 1
+    path: Assets/Scenes/CharacterCreator.unity
+    guid: 2e86687c1172f41df918db1e887a657a
+  - enabled: 1
+    path: Assets/Scenes/SandboxShowcase.unity
+    guid: d4dba9b3ebea24baf92bc6db9d460662
   m_configObjects: {}

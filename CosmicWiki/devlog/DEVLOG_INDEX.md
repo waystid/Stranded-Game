@@ -2,20 +2,20 @@
 
 > **📚 Complete chronological index of all development sessions**
 
-Last Updated: 2026-02-16
+Last Updated: 2026-02-17
 
 ---
 
 ## Overview
 
-**Total Entries:** 4
+**Total Entries:** 7
 **Status:**
-- ✅ Complete: 4
+- ✅ Complete: 7
 - ⏳ In Progress: 0
 - ⚠️ Blocked: 0
 
 **Types:**
-- Feature Implementation: 3
+- Feature Implementation: 6
 - Bug Fix: 1
 - Refactor: 0
 - Documentation: 0
@@ -94,13 +94,53 @@ Last Updated: 2026-02-16
 
 ---
 
+### 2026-02-17 - Synty Character Integration + HumanCustomPlayer
+**File:** [entries/2026-02-17-synty-character-integration.md](entries/2026-02-17-synty-character-integration.md)
+**Type:** Feature Implementation
+**Status:** ✅ Complete
+**Summary:** Verified Synty Sidekick exported characters retarget TDE animations via Humanoid avatar (zero config). Built `HumanCustomPlayer.prefab` — swapped AstronautPlayer in SandboxShowcase with an exported Synty character. Fixed `avatarRoot` binding bug caused by disabled skeleton GO.
+
+**Key Achievements:**
+- Synty Sidekick export pipeline confirmed working (isHuman: true, hasBoundPlayables: true)
+- `HumanCustomPlayer.prefab` — SidekickPlayer TDE stack + Human-Custom mesh
+- SandboxShowcase LevelManager updated to spawn HumanCustomPlayer
+- Animations working: avatarRoot correctly bound to HumanCustomMesh
+
+**Lesson:** Unity finds disabled skeleton GOs during avatarRoot discovery — always DELETE old skeletons, never just `setActive(false)`.
+
+**Next Session:** Feature 007 Phase B — In-game Synty part picker
+
+---
+
+### 2026-02-17 - Feature 007 Phase E — Wardrobe/Mirror Interactable
+**File:** [entries/2026-02-17-wardrobe-interactable.md](entries/2026-02-17-wardrobe-interactable.md)
+**Type:** Feature Implementation
+**Status:** ✅ Complete
+**Summary:** Added in-world WardrobeMirror interactable (ButtonActivated subclass) that opens a full-screen WardrobeUI overlay. Player navigates Head/Upper/Lower body presets and picks from 4×6 colour swatches. Apply hot-swaps the live character mesh via `SyntyCharacterLoader.SwapMesh()` (newly extracted public method) without scene reload. WardrobePanelBuilder editor script builds and wires the entire UI hierarchy in one shot.
+
+**Key Achievements:**
+- `SyntyCharacterLoader.SwapMesh(PlayerCharacterData)` — public hot-swap method, stateless, re-swap safe
+- `WardrobeUI.cs` — canvas overlay, timeScale=0 pause, Synty DB-driven preset nav, 24 colour swatches
+- `WardrobeInteractable.cs` — ButtonActivated subclass, "Wardrobe" prompt
+- `WardrobeMirror.prefab` — placed at (4,0,3), SphereCollider trigger r=1.5
+- `WardrobePanelBuilder.cs` — editor utility builds 500×760 UI card + wires all Inspector refs atomically
+
+**Lesson:** Use an Editor `[MenuItem]` builder script to create entire UI hierarchies — far more reliable than setting RectTransform properties one-by-one via MCP. `ApplyColors()` must be called *after* `SwapMesh()` so it targets the new SMRs.
+
+**Next Session:** Feature 007 complete — merge to feature-base, begin next feature (Inventory or Grid Placement)
+
+---
+
 ## By Type
 
 ### Feature Implementation
 
 1. **2026-02-16** - [Dev Console + Island Grid System](entries/2026-02-16-dev-console-island-grid.md) - ✅ Complete
 2. **2026-02-16** - [Player Model Replacement](entries/2026-02-16-player-model-replacement.md) - ✅ Complete
-3. **2026-02-17** - [ACNH Camera + 16×16 Island](entries/2026-02-17-acnh-camera-island.md) - ✅ Complete
+3. **2026-02-16** - [Curved World + Skybox + Day/Night](entries/2026-02-16-curved-world-skybox-daynight.md) - ✅ Complete
+4. **2026-02-17** - [ACNH Camera + 16×16 Island](entries/2026-02-17-acnh-camera-island.md) - ✅ Complete
+5. **2026-02-17** - [Synty Character Integration + HumanCustomPlayer](entries/2026-02-17-synty-character-integration.md) - ✅ Complete
+6. **2026-02-17** - [Feature 007 Phase E — Wardrobe/Mirror Interactable](entries/2026-02-17-wardrobe-interactable.md) - ✅ Complete
 
 ### Bug Fix
 
@@ -154,9 +194,9 @@ Last Updated: 2026-02-16
 
 ### Planned (Next 3 Sessions)
 
-1. **Grid Placement / Terraforming** - GridCursor raycast, cell hover highlight, terrain type painting (ground/cliff/water)
-2. **Tree Planting** - Place/remove trees at empty grid cells
-3. **Building Placement** - Multi-cell footprint support
+1. **Inventory System** - Item pickups, hotbar UI, basic crafting scaffold (features/002-inventory)
+2. **Grid Placement** - GridCursor hover highlight, click-to-place trees/rocks (features/001-world continuation)
+3. **NPC/AI Foundation** - Z.O.E. companion with TDE AIWalk brain + patrol path
 
 ### Future (Next 10 Sessions)
 
