@@ -5451,6 +5451,7 @@ GameObject:
   - component: {fileID: 2620107355314861742}
   - component: {fileID: 4971857946076290620}
   - component: {fileID: 1053568042596529538}
+  - component: {fileID: 5150007492520202540}
   m_Layer: 10
   m_Name: HumanCustomPlayer
   m_TagString: Player
@@ -6146,6 +6147,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b1f7d50a574945b6943f4f8d4de1161, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SyntyCharacterLoader
+--- !u!114 &5150007492520202540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1706209625301063421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 588e5c85b134e451681c2a43b9903626, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ToolController
+  AbilityStartSfx: {fileID: 0}
+  AbilityInProgressSfx: {fileID: 0}
+  AbilityStopSfx: {fileID: 0}
+  AbilityStartFeedbacks: {fileID: 0}
+  AbilityStopFeedbacks: {fileID: 0}
+  AbilityPermitted: 1
+  BlockingMovementStates: 
+  BlockingConditionStates: 
+  BlockingWeaponStates: 
+  ToolAttachPoint: {fileID: 0}
+  FloraTag: Flora
+  RockTag: Rock
 --- !u!1 &1727787714843690400
 GameObject:
   m_ObjectHideFlags: 0

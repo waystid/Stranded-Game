@@ -66,7 +66,19 @@ public class ACNHCameraFollow : MonoBehaviour
 
     void LateUpdate()
     {
-        if (Target == null) return;
+        // Retry finding the player each frame until found (handles LevelManager late-spawn)
+        if (Target == null)
+        {
+            var playerObj = GameObject.FindGameObjectWithTag("Player");
+            if (playerObj != null)
+            {
+                Target = playerObj.transform;
+                _velocity = Vector3.zero;
+                transform.position = Target.position + Offset;
+                ApplyFixedRotation();
+            }
+            return;
+        }
 
         Vector3 desiredPosition = Target.position + Offset;
 
