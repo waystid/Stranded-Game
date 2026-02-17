@@ -1,6 +1,6 @@
 # Feature 007 Phase B — In-Game Synty Character Customizer
 
-**Status:** 🚧 In Progress (Session 1 complete)
+**Status:** ✅ Phase B Complete — Phase C Complete
 **Branch:** features/007-character-creator
 **Prerequisite:** Phase A complete (SidekickPlayer + CharacterCustomizer ✅)
 
@@ -287,8 +287,12 @@ void Start()
    - SidekickRuntime loaded DB, created character with Fantasy Knight preset
    - PreviewRoot rotation working (40°/s)
    - No runtime errors
-9. `[ ]` Wire save/load to SandboxShowcase — **NEXT SESSION (Phase C)**
-10. `[ ]` Polish and commit
+9. `[x]` Wire save/load to SandboxShowcase — **Phase C COMPLETE (2026-02-17)**
+   - Build Settings: CharacterCreator + SandboxShowcase added (indices 44/45)
+   - PlayerNameDisplay.cs: reads saved name, shows in HUD top-left
+   - Colors: CharacterCustomizer on HumanCustomPlayer already loads from PlayerPrefs
+   - Scene flow: CharacterCreator → "Begin Adventure" → SandboxShowcase confirmed
+10. `[x]` Commit all phases
 
 ### Key Finding: No Custom SyntyPartSwapper Needed
 
