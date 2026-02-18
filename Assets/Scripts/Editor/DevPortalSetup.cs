@@ -22,6 +22,12 @@ namespace CosmicColony.Editor
         private const string LEVEL_SELECTION    = "Assets/TopDownEngine/Demos/LevelSelection/LevelSelection.unity";
         private const string LOFT_SPRITE        = "Assets/TopDownEngine/Demos/LevelSelection/Sprites/level-map-loft.png";
 
+        private const string SYNTY_CC_SOURCE    = "Assets/Synty/SidekickCharacters/_Demos/_Scenes/Sidekick_Tool/Sidekick_RuntimePresetDemo.unity";
+        private const string SYNTY_CC_FOLDER    = "Assets/Scenes/CharacterCreator";
+        private const string SYNTY_CC_PATH      = "Assets/Scenes/CharacterCreator/SyntyCharCreator.unity";
+        private const string SYNTY_CC_NAME      = "SyntyCharCreator";
+        private const string MINIMAL3D_SPRITE   = "Assets/TopDownEngine/Demos/LevelSelection/Sprites/level-map-minimal3D.png";
+
         // ── Original setup (kept for reference) ──────────────────────────────
         [MenuItem("Tools/Galactic Crossing/Setup Dev Portal")]
         public static void SetupDevPortal()
@@ -155,6 +161,85 @@ namespace CosmicColony.Editor
             else
             {
                 Debug.LogWarning("[DevPortalSetup] LevelSelector not found on duplicated card.");
+            }
+
+            EditorUtility.SetDirty(content);
+        }
+
+        // ── Add Character Creator card ────────────────────────────────────────
+        [MenuItem("Tools/Galactic Crossing/Add Character Creator to Level Selection")]
+        public static void AddCharacterCreatorToLevelSelection()
+        {
+            // 1. Copy Synty preset demo scene to our folder
+            if (!AssetDatabase.AssetPathExists(SYNTY_CC_PATH))
+            {
+                if (!AssetDatabase.AssetPathExists(SYNTY_CC_FOLDER))
+                    AssetDatabase.CreateFolder("Assets/Scenes", "CharacterCreator");
+
+                if (!AssetDatabase.CopyAsset(SYNTY_CC_SOURCE, SYNTY_CC_PATH))
+                { Debug.LogError("[DevPortalSetup] Failed to copy Synty character creator scene."); return; }
+                AssetDatabase.SaveAssets();
+                Debug.Log($"[DevPortalSetup] Copied Synty CC scene to {SYNTY_CC_PATH}");
+            }
+            else
+            {
+                Debug.Log("[DevPortalSetup] SyntyCharCreator.unity already exists.");
+            }
+
+            // 2. Add to Build Settings at index 2 (after CoreScene=0, StrandedDev=1)
+            var buildScenes = EditorBuildSettings.scenes.ToList();
+            AddSceneIfMissing(buildScenes, SYNTY_CC_PATH, 2);
+            EditorBuildSettings.scenes = buildScenes.ToArray();
+            Debug.Log("[DevPortalSetup] Build Settings updated with SyntyCharCreator.");
+
+            // 3. Open LevelSelection and add the card at position 1
+            var lsScene = EditorSceneManager.OpenScene(LEVEL_SELECTION, OpenSceneMode.Single);
+            AddCharacterCreatorCard();
+            EditorSceneManager.SaveScene(lsScene);
+            Debug.Log("[DevPortalSetup] Character Creator card added to LevelSelection.");
+
+            // Leave LevelSelection open so it can be inspected
+            Debug.Log("[DevPortalSetup] Done! SyntyCharCreator copied, card at slot 1 (Stranded→CharCreator→KoalaDungeon).");
+        }
+
+        private static void AddCharacterCreatorCard()
+        {
+            var content = GameObject.Find("UICamera/Canvas/Mask/MMCarousel/Content");
+            if (content == null) { Debug.LogError("[DevPortalSetup] MMCarousel/Content not found."); return; }
+
+            if (content.transform.Find("CharacterCreator") != null)
+            { Debug.Log("[DevPortalSetup] CharacterCreator card already exists."); return; }
+
+            // Use KoalaDungeon as template
+            var koala = content.transform.Find("KoalaDungeon");
+            if (koala == null) { Debug.LogError("[DevPortalSetup] KoalaDungeon not found."); return; }
+
+            var card = Object.Instantiate(koala.gameObject, content.transform);
+            card.name = "CharacterCreator";
+
+            // Slot 1: after Stranded (0), before KoalaDungeon (1→2)
+            card.transform.SetSiblingIndex(1);
+
+            var title = card.transform.Find("ItemTitle")?.GetComponent<Text>();
+            if (title != null) title.text = "Character Creator";
+
+            var desc = card.transform.Find("ItemText")?.GetComponent<Text>();
+            if (desc != null) desc.text = "Synty Dev";
+
+            // Use a 3D sprite as stand-in preview
+            var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(MINIMAL3D_SPRITE);
+            if (sprite != null)
+            {
+                var img = card.GetComponent<Image>();
+                if (img != null) img.sprite = sprite;
+            }
+
+            var levelSelector = card.GetComponentInChildren<LevelSelector>();
+            if (levelSelector != null)
+            {
+                levelSelector.LevelName = SYNTY_CC_NAME;
+                levelSelector.DoNotUseLevelManager = true;
+                EditorUtility.SetDirty(levelSelector);
             }
 
             EditorUtility.SetDirty(content);

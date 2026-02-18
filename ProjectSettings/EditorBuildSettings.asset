@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Loft3D/StrandedDev.unity
     guid: c3514d355998945a0b1625743e5bbdfd
   - enabled: 1
+    path: Assets/Scenes/CharacterCreator/SyntyCharCreator.unity
+    guid: f5b3fe7caad0e4ce69a6af83291b80dd
+  - enabled: 1
     path: Assets/TopDownEngine/Demos/StartScreen/StartScreen.unity
     guid: 52360e1567e3fee418407abdfd132d73
   - enabled: 1
