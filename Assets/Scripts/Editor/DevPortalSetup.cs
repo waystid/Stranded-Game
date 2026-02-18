@@ -28,6 +28,36 @@ namespace CosmicColony.Editor
         private const string SYNTY_CC_NAME      = "SyntyCharCreator";
         private const string MINIMAL3D_SPRITE   = "Assets/TopDownEngine/Demos/LevelSelection/Sprites/level-map-minimal3D.png";
 
+        private const string TWC_FOLDER = "Assets/Scenes/TileWorldCreator";
+        private const string TWC_SAMPLES = "Assets/TileWorldCreator/_Samples";
+
+        // TWC scene sources + dest names + display names (in desired order, 2.5D excluded)
+        private static readonly (string src, string destName, string title, string desc)[] TWC_SCENES =
+        {
+            ("StylizedIsland URP/AutoRunBuild.unity",          "TWC_StylizedIsland.unity",      "Stylized Island",      "TWC Auto"),
+            ("RuntimeEditor URP/RuntimeEditor.unity",          "TWC_RuntimeEditor.unity",        "Runtime Editor",       "TWC Dev"),
+            ("CliffIsland URP/CliffIsland.unity",              "TWC_CliffIsland.unity",          "Cliff Island",         "TWC Demo"),
+            ("Deep Rock Crystals URP/DeepRockCrystals.unity",  "TWC_DeepRockCrystals.unity",     "Deep Rock Crystals",   "TWC Demo"),
+            ("MixTilesets URP/MixTilesets.unity",              "TWC_MixTilesets.unity",          "Mix Tilesets",         "TWC Demo"),
+            ("Pathfinding URP/Pathfinding.unity",              "TWC_Pathfinding.unity",          "Pathfinding",          "TWC Demo"),
+            ("Pathfinding URP/PathfindingFollowPath.unity",    "TWC_PathfindingFollow.unity",    "Pathfinding Follow",   "TWC Demo"),
+            ("Ramps URP/Ramps.unity",                          "TWC_Ramps.unity",                "Ramps",                "TWC Demo"),
+            ("StylizedIsland URP/ManualBuild.unity",           "TWC_StylizedManual.unity",       "Stylized Manual",      "TWC Manual"),
+        };
+
+        private static readonly string[] TWC_SPRITES =
+        {
+            "Assets/TopDownEngine/Demos/LevelSelection/Sprites/level-map-minimal3D.png",
+            "Assets/TopDownEngine/Demos/LevelSelection/Sprites/level-map-minimal3D-sandbox.png",
+            "Assets/TopDownEngine/Demos/LevelSelection/Sprites/level-map-minimal3D-rooms.png",
+            "Assets/TopDownEngine/Demos/LevelSelection/Sprites/level-map-minimal3D-ai.png",
+            "Assets/TopDownEngine/Demos/LevelSelection/Sprites/level-map-minimal3D-sword.png",
+            "Assets/TopDownEngine/Demos/LevelSelection/Sprites/level-map-minimal3D-performance.png",
+            "Assets/TopDownEngine/Demos/LevelSelection/Sprites/level-map-minimal2D.png",
+            "Assets/TopDownEngine/Demos/LevelSelection/Sprites/level-map-minimal2D.png",
+            "Assets/TopDownEngine/Demos/LevelSelection/Sprites/level-map-minimal3D.png",
+        };
+
         // ── Original setup (kept for reference) ──────────────────────────────
         [MenuItem("Tools/Galactic Crossing/Setup Dev Portal")]
         public static void SetupDevPortal()
@@ -243,6 +273,100 @@ namespace CosmicColony.Editor
             }
 
             EditorUtility.SetDirty(content);
+        }
+
+        // ── Swap + add all TWC scenes ─────────────────────────────────────────
+        [MenuItem("Tools/Galactic Crossing/Add TWC Scenes to Level Selection")]
+        public static void AddTWCScenesAndSwap()
+        {
+            // 1. Create destination folder
+            if (!AssetDatabase.AssetPathExists(TWC_FOLDER))
+                AssetDatabase.CreateFolder("Assets/Scenes", "TileWorldCreator");
+
+            // 2. Copy all TWC scenes
+            var buildScenes = EditorBuildSettings.scenes.ToList();
+            foreach (var (src, destName, _, _) in TWC_SCENES)
+            {
+                string srcPath  = $"{TWC_SAMPLES}/{src}";
+                string destPath = $"{TWC_FOLDER}/{destName}";
+                if (!AssetDatabase.AssetPathExists(destPath))
+                {
+                    if (!AssetDatabase.CopyAsset(srcPath, destPath))
+                    { Debug.LogError($"[DevPortalSetup] Failed to copy {srcPath}"); continue; }
+                }
+                AddSceneIfMissing(buildScenes, destPath, buildScenes.Count);
+            }
+            AssetDatabase.SaveAssets();
+            EditorBuildSettings.scenes = buildScenes.ToArray();
+            Debug.Log("[DevPortalSetup] TWC scenes copied and added to Build Settings.");
+
+            // 3. Open LevelSelection, swap CharCreator↔Stranded, add TWC cards
+            var lsScene = EditorSceneManager.OpenScene(LEVEL_SELECTION, OpenSceneMode.Single);
+
+            var content = GameObject.Find("UICamera/Canvas/Mask/MMCarousel/Content")?.transform;
+            if (content == null) { Debug.LogError("[DevPortalSetup] Content not found."); return; }
+
+            // 3a. Swap: CharacterCreator → slot 0, Stranded → slot 1
+            var ccTF       = content.Find("CharacterCreator");
+            var strandedTF = content.Find("Stranded");
+            if (ccTF != null && strandedTF != null)
+            {
+                ccTF.SetSiblingIndex(0);
+                strandedTF.SetSiblingIndex(1);
+                Debug.Log("[DevPortalSetup] Swapped CharacterCreator and Stranded.");
+            }
+            else
+            {
+                Debug.LogWarning("[DevPortalSetup] Could not find CharacterCreator or Stranded to swap.");
+            }
+
+            // 3b. Add TWC cards starting at slot 2 (before KoalaDungeon)
+            // Use KoalaDungeon as template
+            var koala = content.Find("KoalaDungeon");
+            if (koala == null) { Debug.LogError("[DevPortalSetup] KoalaDungeon not found."); return; }
+
+            int insertIdx = 2;
+            for (int i = 0; i < TWC_SCENES.Length; i++)
+            {
+                var (_, destName, title, desc) = TWC_SCENES[i];
+                string sceneName = System.IO.Path.GetFileNameWithoutExtension(destName);
+
+                if (content.Find(sceneName) != null)
+                {
+                    Debug.Log($"[DevPortalSetup] {sceneName} card already exists, skipping.");
+                    insertIdx++;
+                    continue;
+                }
+
+                var card = Object.Instantiate(koala.gameObject, content);
+                card.name = sceneName;
+                card.transform.SetSiblingIndex(insertIdx++);
+
+                var titleComp = card.transform.Find("ItemTitle")?.GetComponent<Text>();
+                if (titleComp != null) titleComp.text = title;
+
+                var descComp = card.transform.Find("ItemText")?.GetComponent<Text>();
+                if (descComp != null) descComp.text = desc;
+
+                var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(TWC_SPRITES[i]);
+                if (sprite != null)
+                {
+                    var img = card.GetComponent<Image>();
+                    if (img != null) img.sprite = sprite;
+                }
+
+                var levelSel = card.GetComponentInChildren<LevelSelector>();
+                if (levelSel != null)
+                {
+                    levelSel.LevelName = sceneName;
+                    levelSel.DoNotUseLevelManager = true;
+                    EditorUtility.SetDirty(levelSel);
+                }
+            }
+
+            EditorUtility.SetDirty(content.gameObject);
+            EditorSceneManager.SaveScene(lsScene);
+            Debug.Log("[DevPortalSetup] TWC cards added. Final order: CharCreator→Stranded→TWC×9→KoalaDungeon→...");
         }
 
         private static void AddSceneIfMissing(List<EditorBuildSettingsScene> scenes, string path, int insertAt)
