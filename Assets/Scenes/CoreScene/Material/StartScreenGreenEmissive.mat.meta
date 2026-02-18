@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 2f01b6f7b3dcc4b9f96cd9e12984aeb7
+timeCreated: 1512052967
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 89636
+  packageName: TopDown Engine
+  packageVersion: 4.5
+  assetPath: Assets/TopDownEngine/Demos/StartScreen/Material/StartScreenGreenEmissive.mat
+  uploadId: 846008
